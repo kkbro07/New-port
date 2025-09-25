@@ -1,9 +1,11 @@
 
+
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 import { SkillTabs } from "./skill-tabs";
+import { EducationTimeline } from "./education-timeline";
 
 export function AboutSection() {
   const aboutImage = PlaceHolderImages.find((img) => img.id === "about-portrait");
@@ -25,38 +27,6 @@ export function AboutSection() {
       // Keep default values if URL parsing fails
     }
   }
-  
-  const skills = [
-    "C", "C++", "Java", "Python", "JavaScript", "C#", "SQL",
-    "React.js", "Node.js", "ASP.Net", "PHP", "MySQL", "MongoDB",
-    "Vercel", "App Development", "Image Processing"
-  ];
-
-  const education = [
-    {
-      year: "2024 - Present",
-      degree: "Master of Science (Information Technology)",
-      institution: "UKA TARSADIA UNIVERSITY"
-    },
-    {
-      year: "2021 - 2024",
-      degree: "Bachelor of Science (Information Technology)",
-      institution: "UKA TARSADIA UNIVERSITY",
-      grade: "CGPA 5.47"
-    },
-    {
-      year: "2021",
-      degree: "Class XII - HSC",
-      institution: "BAPS SWAMINARAYAN VIDYAMANDIR, SARANGPUR",
-      grade: "60.93%"
-    },
-    {
-      year: "2019",
-      degree: "Class X - SSC",
-      institution: "BAPS SWAMINARAYAN VIDYAMANDIR, SARANGPUR",
-      grade: "69.33%"
-    }
-  ];
 
   const certificates = [
     {
@@ -122,21 +92,8 @@ export function AboutSection() {
         </section>
 
         <section className="mb-16 md:mb-24">
-          <h2 className="font-headline text-3xl sm:text-4xl font-bold mb-8">Education</h2>
-          <div className="space-y-6">
-            {education.map(edu => (
-              <div key={edu.degree} className="flex flex-col sm:flex-row justify-between sm:items-start">
-                <div className="max-w-md">
-                  <h3 className="text-lg sm:text-xl font-bold">{edu.degree}</h3>
-                  <p className="text-muted-foreground text-sm sm:text-base">{edu.institution}</p>
-                </div>
-                <div className="text-left sm:text-right flex-shrink-0 mt-2 sm:mt-0">
-                  <p className="text-muted-foreground font-mono text-sm">{edu.year}</p>
-                  {edu.grade && <p className="text-muted-foreground font-mono text-sm">{edu.grade}</p>}
-                </div>
-              </div>
-            ))}
-          </div>
+          <h2 className="font-headline text-3xl sm:text-4xl font-bold mb-8 md:mb-16 text-center">Education</h2>
+          <EducationTimeline />
         </section>
 
         <section className="mb-16 md:mb-24">
