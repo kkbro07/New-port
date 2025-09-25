@@ -93,13 +93,24 @@ export function Experiences() {
         className="absolute inset-0 bg-gradient-to-br from-background via-transparent to-background"
       />
       <div className="relative z-10 container mx-auto">
-        <div className="text-center">
+        <div className="text-center mb-24">
             <h2 className="font-headline text-8xl md:text-9xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-foreground to-muted-foreground/80 leading-none">
                 Dream. Make. Change.
             </h2>
             <p className="mt-4 text-lg text-muted-foreground">Our process in three words.</p>
         </div>
-        {/* The individual experience items can be re-added here if needed */}
+        
+        {experiences.map((experience, index) => {
+          const image = imageMap[experience.imageId];
+          return (
+            <Experience 
+              key={experience.id} 
+              experience={experience} 
+              image={image} 
+              index={index} 
+            />
+          );
+        })}
       </div>
     </div>
   );
