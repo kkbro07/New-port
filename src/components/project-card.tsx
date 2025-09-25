@@ -9,18 +9,33 @@ type ProjectCardProps = {
 };
 
 export function ProjectCard({ project, image }: ProjectCardProps) {
-  const [width, height] = image
-    ? image.imageUrl.split("/").slice(-2)
-    : ["800", "600"];
+  let width = 800;
+  let height = 600;
+
+  if (image) {
+    try {
+      const url = new URL(image.imageUrl);
+      const widthParam = url.searchParams.get("w");
+      const heightParam = url.searchParams.get("h"); // Assuming height might be passed as 'h'
+      if (widthParam) {
+        width = parseInt(widthParam, 10);
+      }
+      // You might not get height from unsplash URLs this way, but it's good practice.
+      // Let's rely on aspect ratio from Tailwind for now, and set a reasonable height.
+      // If a specific height param existed, we would parse it like the width.
+    } catch (e) {
+      // Keep default values if URL parsing fails
+    }
+  }
 
   return (
-    <div className="group relative aspect-w-4 aspect-h-3 overflow-hidden rounded-lg shadow-lg">
+    <div className="group relative aspect-[4/3] overflow-hidden rounded-lg shadow-lg">
       {image ? (
         <Image
           src={image.imageUrl}
           alt={image.description}
-          width={parseInt(width)}
-          height={parseInt(height)}
+          width={width}
+          height={height}
           data-ai-hint={image.imageHint}
           className="h-full w-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
         />
