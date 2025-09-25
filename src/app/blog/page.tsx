@@ -76,7 +76,7 @@ export default function BlogPage() {
           {posts.map((post, index) => (
             <article key={post.slug} className="fade-in-stagger opacity-0" style={{ animationDelay: `${index * 150}ms` }}>
               <h2 className="font-headline text-3xl font-bold">
-                <Link href={`/blog/sample-post`} className="hover:text-primary transition-colors">
+                <Link href={`/blog/${post.slug}`} className="hover:text-primary transition-colors">
                   {post.title}
                 </Link>
               </h2>
@@ -84,7 +84,7 @@ export default function BlogPage() {
                 {post.description}
               </p>
               <p className="mt-4">
-                <Link href={`/blog/sample-post`} className="text-primary hover:underline">
+                <Link href={`/blog/${post.slug}`} className="text-primary hover:underline">
                   Read more &rarr;
                 </Link>
               </p>
