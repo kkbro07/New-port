@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Source_Code_Pro } from "next/font/google";
+import { Inter, Oswald } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Header } from "@/components/shared/header";
@@ -7,14 +7,16 @@ import { Footer } from "@/components/shared/footer";
 import { Toaster } from "@/components/ui/toaster";
 
 const fontInter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const fontSourceCodePro = Source_Code_Pro({
+const fontOswald = Oswald({
   subsets: ["latin"],
-  variable: "--font-source-code-pro",
+  variable: "--font-oswald",
+  weight: ["400", "700"],
 });
 
+
 export const metadata: Metadata = {
-  title: "Noirfolio",
-  description: "A minimalist portfolio for creative professionals.",
+  title: "Creative Studio",
+  description: "A portfolio for a creative studio.",
 };
 
 export default function RootLayout({
@@ -28,10 +30,10 @@ export default function RootLayout({
         className={cn(
           "min-h-screen bg-background font-body antialiased",
           fontInter.variable,
-          fontSourceCodePro.variable
+          fontOswald.variable
         )}
       >
-        <div className="relative flex min-h-dvh flex-col">
+        <div className="relative flex min-h-dvh flex-col background-grid">
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />

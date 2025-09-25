@@ -19,7 +19,7 @@ const config = {
     extend: {
       fontFamily: {
         body: ['var(--font-inter)', 'sans-serif'],
-        headline: ['var(--font-inter)', 'sans-serif'],
+        headline: ['var(--font-oswald)', 'sans-serif'],
         code: ['var(--font-source-code-pro)', 'monospace'],
       },
       colors: {
