@@ -10,7 +10,7 @@ export function Header() {
 
   const navItems = [
     { href: "/#work", label: "Work" },
-    { href: "/about", label: "Studio" },
+    { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
   ];
 
@@ -23,7 +23,7 @@ export function Header() {
           href="/"
           className="text-2xl font-bold tracking-tighter transition-colors hover:text-muted-foreground font-headline uppercase"
         >
-          Noir
+          Kirtan
         </Link>
         <div className="flex items-center gap-8">
           <nav className="hidden items-center space-x-8 text-sm font-medium md:flex">

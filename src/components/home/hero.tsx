@@ -24,18 +24,17 @@ export function Hero() {
         </div>
         <div className="text-left fade-in space-y-8">
           <h1 className="font-headline text-6xl md:text-7xl lg:text-8xl font-bold uppercase tracking-tighter text-primary leading-none">
-            In a world where every second counts, we design with intention to
-            maximise dwell time
+            I craft brands & digital experiences that blend functionality with aesthetics.
           </h1>
 
           <div className="space-y-4">
-            <h2 className="text-2xl font-bold">Samet + Hassam</h2>
+            <h2 className="text-2xl font-bold">Kirtan Kalathiya</h2>
             <p className="text-muted-foreground">
-              CO-FOUNDERS OF FUTURE THREE
+              WEB DESIGNER + DEVELOPER
             </p>
             <Link href="/about">
               <Button variant="link" className="p-0 text-lg text-primary">
-                Our Story <ArrowRight className="ml-2 h-5 w-5" />
+                About Me <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
           </div>

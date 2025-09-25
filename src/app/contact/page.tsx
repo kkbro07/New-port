@@ -9,7 +9,7 @@ export default function ContactPage() {
             Get in Touch
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-lg text-muted-foreground">
-            Have a project in mind or just want to say hello? We'd love to hear
+            Have a project in mind or just want to say hello? I'd love to hear
             from you.
           </p>
         </section>
@@ -17,13 +17,12 @@ export default function ContactPage() {
         <section className="grid grid-cols-1 gap-12 md:grid-cols-2">
           <div className="space-y-4 text-muted-foreground">
             <div>
-              <h3 className="font-semibold text-foreground">Email Us</h3>
-              <p>hello@noirfoli.io</p>
+              <h3 className="font-semibold text-foreground">Email Me</h3>
+              <p>kirtan6189@gmail.com</p>
             </div>
             <div>
-              <h3 className="font-semibold text-foreground">Our Studio</h3>
-              <p>123 Creative Lane</p>
-              <p>Design District, 90210</p>
+              <h3 className="font-semibold text-foreground">My Location</h3>
+              <p>Surat, Gujarat, India</p>
             </div>
           </div>
           <div>

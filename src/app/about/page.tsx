@@ -31,7 +31,7 @@ export default function AboutPage() {
       <div className="container mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
         <section className="mb-16 text-center">
           <h1 className="font-headline text-8xl font-bold uppercase tracking-tighter text-foreground sm:text-9xl md:text-[10rem] lg:text-[12rem] leading-none">
-            Born to Create
+            About Me
           </h1>
         </section>
 
@@ -52,19 +52,15 @@ export default function AboutPage() {
             </div>
             <div className="space-y-12">
                 <div className="space-y-4">
-                    <h2 className="text-4xl font-bold font-headline">Samet Cubuk</h2>
+                    <h2 className="text-4xl font-bold font-headline">Kirtan Kalathiya</h2>
                     <p className="text-muted-foreground text-lg">
-                    CO-FOUNDER + TECHNICAL LEAD
+                    WEB DESIGNER + DEVELOPER
                     </p>
                 </div>
                 <div className="space-y-4">
-                    <h2 className="text-4xl font-bold font-headline">Hassam Khan</h2>
-                    <p className="text-muted-foreground text-lg">
-                    CO-FOUNDER + CREATIVE LEAD
-                    </p>
-                </div>
-                <div className="flex justify-end pt-12">
-                    <p className="font-headline text-7xl text-primary font-bold">- Together</p>
+                  <p className="text-muted-foreground text-lg">
+                  My name is Kirtan Kalathiya, a web designer and developer from Surat, India. I'm a passionate programmer and quick learner with experience in Node.js, React, Bootstrap, MongoDB, and MySQL. As an SEO fresher, I have basic knowledge of on-page and off-page SEO, keyword research, and tools like Google Search Console and Yoast SEO. I'm eager to build websites that are both user-friendly and search engine optimized.
+                  </p>
                 </div>
             </div>
         </section>
