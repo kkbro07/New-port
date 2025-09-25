@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter, Oswald } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { Header } from "@/components/shared/header";
 import { Footer } from "@/components/shared/footer";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -33,7 +32,6 @@ export default function RootLayout({
         )}
       >
         <div className="relative flex min-h-dvh flex-col">
-          <Header />
           <main className="flex-1">{children}</main>
           <Footer />
         </div>
