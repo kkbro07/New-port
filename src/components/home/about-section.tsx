@@ -3,7 +3,7 @@ import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
-import { SkillsMarquee } from "./skills-marquee";
+import { SkillCloud } from "./skill-cloud";
 
 export function AboutSection() {
   const aboutImage = PlaceHolderImages.find((img) => img.id === "about-portrait");
@@ -118,7 +118,7 @@ export function AboutSection() {
 
         <section className="mb-24">
           <h2 className="font-headline text-4xl font-bold mb-12 text-center">My Skills</h2>
-          <SkillsMarquee skills={skills} />
+          <SkillCloud skills={skills} />
         </section>
 
         <section className="mb-24">
