@@ -5,7 +5,6 @@ import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { type ImagePlaceholder } from "@/lib/placeholder-images";
 import { AboutSection } from "@/components/home/about-section";
 import { ContactSection } from "@/components/home/contact-section";
-import { Experiences } from "@/components/home/experiences";
 import { ProjectSectionHeader } from "@/components/home/project-section-header";
 
 export default function Home() {
@@ -36,7 +35,6 @@ export default function Home() {
         </section>
       </div>
       <AboutSection />
-      <Experiences />
       <ContactSection />
     </>
   );
