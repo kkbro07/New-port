@@ -3,6 +3,8 @@ export type Project = {
   title: string;
   category: string;
   imageId: string;
+  featured?: boolean;
+  meta?: string;
 };
 
 export const projects: Project[] = [
@@ -42,4 +44,20 @@ export const projects: Project[] = [
     category: "Exhibition",
     imageId: "project-6",
   },
+  {
+    id: "7",
+    title: "Rodewald",
+    category: "Experience Design",
+    imageId: "experience-1",
+    featured: true,
+    meta: "INTERNATIONAL"
+  },
+  {
+    id: "8",
+    title: "TCG Dream",
+    category: "Digital Product",
+    imageId: "experience-2",
+    featured: true,
+    meta: "GERMANY"
+  }
 ];

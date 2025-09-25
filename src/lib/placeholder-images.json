@@ -41,6 +41,18 @@
       "description": "Two men standing against a solid color background.",
       "imageUrl": "https://images.unsplash.com/photo-1585430193961-4a8f348dd135?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx0d28lMjBtZW58ZW58MHx8fHwxNzU4Nzk1ODUwfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "two men"
+    },
+    {
+      "id": "experience-1",
+      "description": "A person working with wood in a workshop.",
+      "imageUrl": "https://images.unsplash.com/photo-1595692359480-155a04a4b2be?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3b29kd29ya2luZ3xlbnwwfHx8fDE3NTg4MDMwMDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "woodworking person"
+    },
+    {
+      "id": "experience-2",
+      "description": "A futuristic city skyline with flying vehicles.",
+      "imageUrl": "https://images.unsplash.com/photo-1635892228839-a79b20b2ba54?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxmdXR1cmlzdGljJTIwY2l0eXxlbnwwfHx8fDE3NTg4MDMwMzB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "futuristic city"
     }
   ]
 }
