@@ -74,11 +74,9 @@ export function SkillSphere({ skills }: { skills: string[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [rotation, setRotation] = useState({ x: 0, y: 0 });
   const mousePosRef = useRef({ x: 0, y: 0 });
-  const velocityRef = useRef({ x: 0, y: 0 });
   const isInteracting = useRef(false);
   const [radius, setRadius] = useState(150);
   const [isMounted, setIsMounted] = useState(false);
-  const dampingFactor = 0.95;
 
   useEffect(() => {
     if (containerRef.current) {
@@ -91,39 +89,13 @@ export function SkillSphere({ skills }: { skills: string[] }) {
     let animationFrame: number;
 
     const animate = () => {
-      setRotation((prev) => {
-        let newX = prev.x;
-        let newY = prev.y;
-
-        if (isInteracting.current) {
-          // While dragging, velocity is directly tied to mouse movement (handled in onMouseMove)
-          newX += velocityRef.current.x;
-          newY += velocityRef.current.y;
-        } else {
-          // Apply inertia
-          newX += velocityRef.current.x;
-          newY += velocityRef.current.y;
-          
-          // Apply damping (friction)
-          velocityRef.current.x *= dampingFactor;
-          velocityRef.current.y *= dampingFactor;
-
-          // Stop animation when velocity is negligible
-          if (Math.abs(velocityRef.current.x) < 0.0001 && Math.abs(velocityRef.current.y) < 0.0001) {
-            velocityRef.current.x = 0;
-            velocityRef.current.y = 0;
-          }
+        if (!isInteracting.current) {
+            setRotation((prev) => ({
+                x: prev.x - 0.0002,
+                y: prev.y + 0.0004,
+            }));
         }
-        
-        // Add a slow, constant rotation when not interacting and velocity is near zero
-        if (!isInteracting.current && velocityRef.current.x === 0 && velocityRef.current.y === 0) {
-            newX -= 0.0002;
-            newY += 0.0004;
-        }
-
-        return { x: newX, y: newY };
-      });
-      animationFrame = requestAnimationFrame(animate);
+        animationFrame = requestAnimationFrame(animate);
     };
 
     animationFrame = requestAnimationFrame(animate);
@@ -134,7 +106,6 @@ export function SkillSphere({ skills }: { skills: string[] }) {
   const handleMouseDown = (e: React.MouseEvent) => {
     isInteracting.current = true;
     mousePosRef.current = { x: e.clientX, y: e.clientY };
-    velocityRef.current = { x: 0, y: 0 };
   };
   
   const handleMouseUp = () => {
@@ -146,11 +117,9 @@ export function SkillSphere({ skills }: { skills: string[] }) {
       const dx = e.clientX - mousePosRef.current.x;
       const dy = e.clientY - mousePosRef.current.y;
       
-      const newRotationX = -dy * 0.001;
-      const newRotationY = dx * 0.001;
+      const newRotationX = -dy * 0.005; // Increased sensitivity
+      const newRotationY = dx * 0.005;  // Increased sensitivity
 
-      velocityRef.current = { x: newRotationX, y: newRotationY };
-      
       setRotation(prev => ({
         x: prev.x + newRotationX,
         y: prev.y + newRotationY,
