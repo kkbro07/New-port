@@ -3,7 +3,7 @@ import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
-import { SkillSphere } from "./skill-sphere";
+import { SkillTabs } from "./skill-tabs";
 
 export function AboutSection() {
   const aboutImage = PlaceHolderImages.find((img) => img.id === "about-portrait");
@@ -118,7 +118,7 @@ export function AboutSection() {
 
         <section className="mb-16 md:mb-24">
           <h2 className="font-headline text-3xl sm:text-4xl font-bold mb-8 sm:mb-12 text-center">My Skills</h2>
-          <SkillSphere skills={skills} />
+          <SkillTabs />
         </section>
 
         <section className="mb-16 md:mb-24">
