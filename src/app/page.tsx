@@ -6,6 +6,7 @@ import { type ImagePlaceholder } from "@/lib/placeholder-images";
 import { AboutSection } from "@/components/home/about-section";
 import { ContactSection } from "@/components/home/contact-section";
 import { Experiences } from "@/components/home/experiences";
+import { ProjectSectionHeader } from "@/components/home/project-section-header";
 
 export default function Home() {
   const imageMap = PlaceHolderImages.reduce((acc, img) => {
@@ -16,18 +17,10 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <div id="work" className="container mx-auto px-4 py-24 sm:px-6 lg:px-8">
-        <section className="mb-16 text-center fade-in">
-          <h2 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
-            Projects We Love
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-            A collection of projects showcasing my passion for design and
-            technology.
-          </p>
-        </section>
+      <div id="work" className="container mx-auto px-4 pt-24 sm:px-6 lg:px-8">
+        <ProjectSectionHeader />
 
-        <section className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <section className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 pb-24">
           {projects.map((project, index) => {
             const image = imageMap[project.imageId];
             return (
