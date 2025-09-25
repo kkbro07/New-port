@@ -88,24 +88,18 @@ export function Experiences() {
 
 
   return (
-    <div id="experience" className="relative py-24 bg-background background-grid">
+    <div id="experience" className="relative py-48 bg-background background-grid">
        <div 
         className="absolute inset-0 bg-gradient-to-br from-background via-transparent to-background"
       />
-      <div className="relative z-10">
-        <div className="text-center mb-16">
-            <h2 className="font-headline text-8xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-foreground to-muted-foreground/80 leading-none">
-                Experience
+      <div className="relative z-10 container mx-auto">
+        <div className="text-center">
+            <h2 className="font-headline text-8xl md:text-9xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-foreground to-muted-foreground/80 leading-none">
+                Dream. Make. Change.
             </h2>
+            <p className="mt-4 text-lg text-muted-foreground">Our process in three words.</p>
         </div>
-        {experiences.map((experience, index) => (
-          <Experience 
-            key={experience.id} 
-            experience={experience} 
-            image={imageMap[experience.imageId]}
-            index={index}
-          />
-        ))}
+        {/* The individual experience items can be re-added here if needed */}
       </div>
     </div>
   );
