@@ -144,21 +144,20 @@ export function EducationTimeline() {
         offset: ["start start", "end end"],
     });
 
-    const pathLength = useTransform(scrollYProgress, [0.05, 0.95], [0, 1]);
+    const pathLength = useTransform(scrollYProgress, [0.05, 0.8], [0, 1]);
     
-    // Adjusted Path for a more prominent S-curve
-    const desktopPath = "M 500 0 V 150 Q 500 250 350 350 T 650 550 Q 650 650 500 750 V 900 Q 500 1000 350 1100 T 650 1300 V 1800";
-    const mobilePath = "M 3 0 V 2000";
+    const desktopPath = "M 500 0 V 150 Q 500 250 350 350 T 650 550 Q 650 650 500 750 V 900 Q 500 1000 350 1100 T 650 1300 V 1400";
+    const mobilePath = "M 3 0 V 1600";
 
     const path = isMobile ? mobilePath : desktopPath;
     const pathKey = isMobile ? 'mobile' : 'desktop';
 
     return (
-        <div ref={ref} className="relative max-w-5xl mx-auto py-16 px-4" style={{minHeight: "2500px"}}>
+        <div ref={ref} className="relative max-w-5xl mx-auto py-16 px-4" style={{minHeight: "2000px"}}>
              <h2 className="font-headline text-3xl sm:text-4xl font-bold mb-16 text-center z-20 relative">My Journey</h2>
             
             <div className="absolute top-0 left-0 h-full w-full">
-                <svg width="100%" height="100%" viewBox={isMobile ? "0 0 10 2000" : "0 0 1000 1800"} preserveAspectRatio="none">
+                <svg width="100%" height="100%" viewBox={isMobile ? "0 0 10 1600" : "0 0 1000 1400"} preserveAspectRatio="none">
                     <defs>
                         <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
                             <feGaussianBlur stdDeviation="5" result="coloredBlur" />
