@@ -8,22 +8,19 @@ export function ProjectSectionHeader() {
   const targetRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: targetRef,
-    offset: ["start end", "end start"],
+    offset: ["start end", "end center"],
   });
 
+  // Animate from blur(8px) to blur(0px)
+  const blur = useTransform(scrollYProgress, [0, 1], [8, 0]);
+  // Animate from opacity(0) to opacity(1)
+  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
   // Parallax for vertical movement
-  const y = useTransform(scrollYProgress, [0, 1], [-200, 100]);
-  
-  // Animate clip-path for reveal effect
-  const clipPath = useTransform(
-    scrollYProgress, 
-    [0.2, 0.5], 
-    ["inset(100% 0% 0% 0%)", "inset(0% 0% 0% 0%)"]
-  );
+  const y = useTransform(scrollYProgress, [0, 1], [50, 0]);
 
   return (
-    <section ref={targetRef} className="relative mb-16 text-center fade-in h-64 flex flex-col justify-center overflow-hidden">
-        <motion.div style={{ y, clipPath }} className="relative z-10">
+    <section ref={targetRef} className="relative mb-16 text-center fade-in h-64 flex flex-col justify-center">
+        <motion.div style={{ y, opacity, filter: useTransform(blur, (v) => `blur(${v}px)`) }} className="relative z-10">
             <h2 
                 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl"
             >
