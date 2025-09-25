@@ -5,6 +5,7 @@ import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { type ImagePlaceholder } from "@/lib/placeholder-images";
 import { AboutSection } from "@/components/home/about-section";
 import { ContactSection } from "@/components/home/contact-section";
+import { Experiences } from "@/components/home/experiences";
 
 export default function Home() {
   const imageMap = PlaceHolderImages.reduce((acc, img) => {
@@ -42,7 +43,9 @@ export default function Home() {
         </section>
       </div>
       <AboutSection />
+      <Experiences />
       <ContactSection />
     </>
   );
 }
+    
