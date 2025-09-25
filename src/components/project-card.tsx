@@ -16,13 +16,11 @@ export function ProjectCard({ project, image }: ProjectCardProps) {
     try {
       const url = new URL(image.imageUrl);
       const widthParam = url.searchParams.get("w");
-      const heightParam = url.searchParams.get("h"); // Assuming height might be passed as 'h'
       if (widthParam) {
         width = parseInt(widthParam, 10);
       }
-      // You might not get height from unsplash URLs this way, but it's good practice.
-      // Let's rely on aspect ratio from Tailwind for now, and set a reasonable height.
-      // If a specific height param existed, we would parse it like the width.
+      // Assuming a 4:3 aspect ratio if height isn't available
+      height = width * (3 / 4);
     } catch (e) {
       // Keep default values if URL parsing fails
     }
@@ -47,15 +45,15 @@ export function ProjectCard({ project, image }: ProjectCardProps) {
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
       <div className="absolute inset-0 flex flex-col justify-end p-6">
         <div className="transform transition-transform duration-300 ease-in-out group-hover:-translate-y-4">
-          <h3 className="font-headline text-2xl font-bold text-primary-foreground">
+          <h3 className="font-headline text-2xl font-bold text-white">
             {project.title}
           </h3>
-          <p className="text-sm text-primary-foreground/80">
+          <p className="text-sm text-white/80">
             {project.category}
           </p>
         </div>
         <div className="absolute bottom-6 right-6 -translate-x-4 opacity-0 transition-all duration-300 ease-in-out group-hover:translate-x-0 group-hover:opacity-100">
-          <ArrowRight className="h-6 w-6 text-primary-foreground" />
+          <ArrowRight className="h-6 w-6 text-white" />
         </div>
       </div>
     </div>

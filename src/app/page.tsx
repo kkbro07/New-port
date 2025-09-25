@@ -1,6 +1,4 @@
 import { Hero } from "@/components/home/hero";
-import { Ticker } from "@/components/home/ticker";
-import { Experiences } from "@/components/home/experiences";
 import { ProjectCard } from "@/components/project-card";
 import { projects } from "@/lib/projects-data";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
@@ -12,20 +10,16 @@ export default function Home() {
     return acc;
   }, {} as Record<string, ImagePlaceholder>);
 
-  const featuredProjects = projects.filter(project => project.featured);
-
   return (
     <>
       <Hero />
-      <Ticker />
-      <Experiences projects={featuredProjects} images={imageMap} />
       <div id="work" className="container mx-auto px-4 py-24 sm:px-6 lg:px-8">
         <section className="mb-16 text-center fade-in">
           <h2 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
-            Selected Work
+            Projects We Love
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-            A collection of projects showcasing our passion for design and
+            A collection of projects showcasing my passion for design and
             technology.
           </p>
         </section>

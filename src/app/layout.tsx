@@ -13,10 +13,9 @@ const fontOswald = Oswald({
   weight: ["400", "700"],
 });
 
-
 export const metadata: Metadata = {
-  title: "Creative Studio",
-  description: "A portfolio for a creative studio.",
+  title: "Kirtan Kalathiya - Web Designer & Developer",
+  description: "Portfolio of Kirtan Kalathiya, a web designer and developer from Surat, India.",
 };
 
 export default function RootLayout({
@@ -33,7 +32,7 @@ export default function RootLayout({
           fontOswald.variable
         )}
       >
-        <div className="relative flex min-h-dvh flex-col background-grid">
+        <div className="relative flex min-h-dvh flex-col">
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />

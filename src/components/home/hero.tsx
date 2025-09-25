@@ -1,43 +1,23 @@
-import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
 
 export function Hero() {
-  const heroImage = PlaceHolderImages.find((img) => img.id === "about-portrait");
-
   return (
-    <div className="relative h-dvh flex items-center justify-center">
-      <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center px-4 sm:px-6 lg:px-8">
-        <div className="relative h-[70vh] w-full flex items-center justify-center fade-in">
-          {heroImage && (
-            <Image
-              src={heroImage.imageUrl}
-              alt={heroImage.description}
-              width={800}
-              height={1000}
-              data-ai-hint={heroImage.imageHint}
-              className="object-cover h-full w-auto rounded-lg"
-            />
-          )}
-        </div>
-        <div className="text-left fade-in space-y-8">
-          <h1 className="font-headline text-6xl md:text-7xl lg:text-8xl font-bold uppercase tracking-tighter text-primary leading-none">
+    <div className="relative min-h-[60vh] flex items-center justify-center text-center fade-in bg-background">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="font-headline text-5xl md:text-7xl lg:text-8xl font-bold uppercase tracking-tighter text-primary leading-tight">
             I craft brands & digital experiences that blend functionality with aesthetics.
           </h1>
-
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold">Kirtan Kalathiya</h2>
-            <p className="text-muted-foreground">
-              WEB DESIGNER + DEVELOPER
-            </p>
-            <Link href="/about">
-              <Button variant="link" className="p-0 text-lg text-primary">
-                About Me <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-          </div>
+          <p className="mt-8 text-lg md:text-xl text-muted-foreground">
+            Let’s create something special — Contact me
+          </p>
+          <Link href="/contact" className="mt-8 inline-block">
+            <Button size="lg">
+              Get in Touch <ArrowRight className="ml-2" />
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
