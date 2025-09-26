@@ -22,6 +22,9 @@ export const ExperienceNode = ({ item, targetRef }: { item: Experience, targetRe
     return (
         <motion.div
             style={{ y, opacity }}
+            transition={{
+                y: { type: "spring", stiffness: 100, damping: 30, restDelta: 0.001 }
+            }}
             className={cn(
                 "relative z-20 w-full pt-16",
                 isMobile ? "p-4 text-left" : "p-8 w-3/4 max-w-2xl mx-auto text-center"

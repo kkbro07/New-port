@@ -1,3 +1,5 @@
+"use client";
+
 import { Hero } from "@/components/home/hero";
 import { ProjectCard } from "@/components/project-card";
 import { projects } from "@/lib/projects-data";
@@ -6,6 +8,7 @@ import { type ImagePlaceholder } from "@/lib/placeholder-images";
 import { AboutSection } from "@/components/home/about-section";
 import { ContactSection } from "@/components/home/contact-section";
 import { ProjectSectionHeader } from "@/components/home/project-section-header";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const imageMap = PlaceHolderImages.reduce((acc, img) => {
@@ -23,13 +26,15 @@ export default function Home() {
           {projects.map((project, index) => {
             const image = imageMap[project.imageId];
             return (
-              <div
+              <motion.div
                 key={project.id}
-                className="fade-in-stagger opacity-0"
-                style={{ animationDelay: `${index * 150}ms` }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.15, duration: 0.5, ease: "easeOut" }}
+                className="fade-in-stagger"
               >
                 <ProjectCard project={project} image={image} />
-              </div>
+              </motion.div>
             );
           })}
         </section>

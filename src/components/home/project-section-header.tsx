@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useRef } from "react";
@@ -19,8 +18,16 @@ export function ProjectSectionHeader() {
   const y = useTransform(scrollYProgress, [0, 1], [50, 0]);
 
   return (
-    <section ref={targetRef} className="relative mb-12 sm:mb-16 text-center fade-in h-48 sm:h-64 flex flex-col justify-center">
-        <motion.div style={{ y, opacity, filter: useTransform(blur, (v) => `blur(${v}px)`) }} className="relative z-10">
+    <section ref={targetRef} className="relative mb-12 sm:mb-16 text-center h-48 sm:h-64 flex flex-col justify-center">
+        <motion.div 
+            style={{ y, opacity, filter: useTransform(blur, (v) => `blur(${v}px)`) }}
+            transition={{
+                y: { type: "spring", stiffness: 100, damping: 30, restDelta: 0.001 },
+                opacity: { duration: 0.5 },
+                filter: { duration: 0.5 }
+            }}
+            className="relative z-10"
+        >
             <h2 
                 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl"
             >
