@@ -25,9 +25,10 @@ export function Footer() {
             <Twitter className="h-5 w-5" />
           </Link>
           <Link
-            href="#"
+            href="https://www.linkedin.com/in/kirtankalathiya/"
             aria-label="LinkedIn"
             className="text-muted-foreground transition-colors hover:text-foreground"
+            target="_blank"
           >
             <Linkedin className="h-5 w-5" />
           </Link>

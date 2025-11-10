@@ -21,9 +21,9 @@ import { Button } from "@/components/ui/button";
 import { InstagramBadge } from "@/components/home/instagram-badge";
 import { GithubBadge } from "@/components/home/github-badge";
 import { YoutubeBadge } from "@/components/home/youtube-badge";
+import { LinkedInBadge } from "@/components/home/linkedin-badge";
 
 export default function Home() {
-  const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -34,27 +34,6 @@ export default function Home() {
     acc[img.id] = img;
     return acc;
   }, {} as Record<string, ImagePlaceholder>);
-
-  const renderLinkedInBadge = () => {
-    if (!mounted) {
-      // Render a placeholder or nothing on the server/first-render
-      return <div className="w-[240px] h-[317px]"></div>; 
-    }
-
-    if (resolvedTheme === 'dark') {
-      return (
-        <div key="dark-badge" className="badge-base LI-profile-badge" data-locale="en_US" data-size="medium" data-theme="dark" data-type="VERTICAL" data-vanity="kirtankalathiya" data-version="v1">
-            {/* The script will populate this */}
-        </div>
-      );
-    }
-    
-    return (
-      <div key="light-badge" className="badge-base LI-profile-badge" data-locale="en_US" data-size="medium" data-theme="light" data-type="VERTICAL" data-vanity="kirtankalathiya" data-version="v1">
-          {/* The script will populate this */}
-      </div>
-    );
-  }
 
   return (
     <>
@@ -98,7 +77,7 @@ export default function Home() {
                   <Github />
                 </Button>
               </Link>
-              <Link href="#" aria-label="LinkedIn">
+              <Link href="https://www.linkedin.com/in/kirtankalathiya/" aria-label="LinkedIn" target="_blank">
                 <Button variant="outline" size="icon">
                   <Linkedin />
                 </Button>
@@ -120,7 +99,7 @@ export default function Home() {
               </Link>
             </div>
             <div className="flex flex-wrap justify-center items-start gap-8 mt-8">
-              {renderLinkedInBadge()}
+              {mounted && <LinkedInBadge />}
               {mounted && <InstagramBadge />}
               {mounted && <GithubBadge />}
               {mounted && <YoutubeBadge />}
