@@ -71,7 +71,7 @@ export function Hero() {
           <nav className="mt-2 sm:mt-4 flex flex-col items-end space-y-1 text-sm font-medium">
             {navItems.map((item) => (
               <Link
-                key={item.href}
+                key={`${item.href}-${item.label}`}
                 href={item.href}
                 onClick={(e) => handleScroll(e, item.href)}
                 className={cn(
