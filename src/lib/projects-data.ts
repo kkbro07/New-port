@@ -42,4 +42,12 @@ export const projects: Project[] = [
     description: "Developed a file conversion web app using Python, Django, and React.js. The platform allows users to convert PDF to Word, Word to PDF, and merge PDFs. The user-friendly interface enables quick file uploads and conversions. Django handles backend processing, while React.js ensures a responsive frontend. The app provides a fast, reliable solution for managing document conversion.",
     githubLink: "#"
   },
+  {
+    id: "5",
+    title: "Jarvis AI Assistant",
+    category: "AI/ML Development",
+    imageId: "project-7",
+    description: "A personal AI assistant inspired by Jarvis from Iron Man, built with Python. It can perform various tasks like opening applications, searching the web, and providing real-time information.",
+    githubLink: "https://github.com/kkbro07/jarvis"
+  }
 ];
