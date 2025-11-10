@@ -66,7 +66,7 @@ export default function Home() {
       <section className="py-16 sm:py-24 text-center">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
-              Find Me on Social Media
+              Me on Social Media
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-base text-muted-foreground sm:text-lg">
                 Connect with me to see my professional journey, achievements, and to network with other professionals in our industry.

@@ -34,7 +34,7 @@ export const ExperienceNode = ({ item, targetRef }: { item: Experience, targetRe
             <h3 className="text-lg sm:text-xl font-bold mt-1 text-foreground">{item.title}</h3>
             <p className="text-muted-foreground text-sm sm:text-base">{item.company}</p>
             {item.description && (
-                <p className="mt-4 text-sm text-muted-foreground/80">{item.description}</p>
+                <p className="mt-4 text-sm text-foreground/80">{item.description}</p>
             )}
         </motion.div>
     )
