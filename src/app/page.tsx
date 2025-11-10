@@ -46,6 +46,11 @@ export default function Home() {
         <Separator />
       </div>
       <BlogSection />
+      <section className="py-16 sm:py-24 flex justify-center">
+        <div className="badge-base LI-profile-badge" data-locale="en_US" data-size="medium" data-theme="light" data-type="VERTICAL" data-vanity="kirtankalathiya" data-version="v1">
+            {/* The script will populate this */}
+        </div>
+      </section>
       <ContactSection />
     </>
   );

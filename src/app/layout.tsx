@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Footer } from "@/components/shared/footer";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/shared/theme-provider";
+import Script from "next/script";
 
 const fontInter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const fontOswald = Oswald({
@@ -44,6 +45,7 @@ export default function RootLayout({
           </div>
           <Toaster />
         </ThemeProvider>
+        <Script src="https://platform.linkedin.com/badges/js/profile.js" async defer type="text/javascript"></Script>
       </body>
     </html>
   );
