@@ -138,15 +138,17 @@
     left: 50%;
     transform-origin: center;
     margin-left: -100px; /* Half of panel width */
-    margin-top: -50px;  /* Half of panel height */
-    height: 100px;
+    margin-top: -75px;  /* Half of panel height */
+    width: 200px;
+    height: 150px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     background-color: hsl(var(--secondary));
     color: hsl(var(--secondary-foreground));
     border-radius: var(--radius);
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: bold;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     backface-visibility: hidden;
