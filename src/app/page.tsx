@@ -20,6 +20,7 @@ import { Github, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { InstagramBadge } from "@/components/home/instagram-badge";
 import { GithubBadge } from "@/components/home/github-badge";
+import { YoutubeBadge } from "@/components/home/youtube-badge";
 
 export default function Home() {
   const { resolvedTheme } = useTheme();
@@ -122,6 +123,7 @@ export default function Home() {
               {renderLinkedInBadge()}
               {mounted && <InstagramBadge />}
               {mounted && <GithubBadge />}
+              {mounted && <YoutubeBadge />}
             </div>
         </div>
       </section>
