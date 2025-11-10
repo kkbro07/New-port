@@ -9,6 +9,8 @@ import { AboutSection } from "@/components/home/about-section";
 import { ContactSection } from "@/components/home/contact-section";
 import { ProjectSectionHeader } from "@/components/home/project-section-header";
 import { motion } from "framer-motion";
+import { BlogSection } from "@/components/home/blog-section";
+import { Separator } from "@/components/ui/separator";
 
 export default function Home() {
   const imageMap = PlaceHolderImages.reduce((acc, img) => {
@@ -40,6 +42,10 @@ export default function Home() {
         </section>
       </div>
       <AboutSection />
+      <div className="max-w-5xl mx-auto px-4">
+        <Separator />
+      </div>
+      <BlogSection />
       <ContactSection />
     </>
   );
