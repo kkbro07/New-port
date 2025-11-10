@@ -61,8 +61,8 @@ export default function Home() {
         </section>
       </div>
       <AboutSection />
-      <ExperienceSection />
       <SkillsSection />
+      <ExperienceSection />
       <div className="max-w-5xl mx-auto px-4">
         <Separator />
       </div>
