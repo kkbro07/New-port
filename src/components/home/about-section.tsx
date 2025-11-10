@@ -5,6 +5,8 @@ import { useRef } from "react";
 import { EducationTimeline } from "./education-timeline";
 import { ExperienceNode } from "./experience-node";
 import { experiences } from "@/lib/experiences-data";
+import { BlogSection } from "./blog-section";
+import { Separator } from "../ui/separator";
 
 export function AboutSection() {
   const experienceContainerRef = useRef<HTMLDivElement>(null);
@@ -20,6 +22,9 @@ export function AboutSection() {
               Dream. Make. Change.
               </h2>
           </div>
+          <Separator />
+          <BlogSection />
+          <Separator />
           <div ref={experienceContainerRef} className="h-96">
             <ExperienceNode item={experiences[0]} targetRef={experienceContainerRef} />
           </div>

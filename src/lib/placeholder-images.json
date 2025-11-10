@@ -53,6 +53,12 @@
       "description": "A futuristic city skyline with flying vehicles.",
       "imageUrl": "https://images.unsplash.com/photo-1635892228839-a79b20b2ba54?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxmdXR1cmlzdGljJTIwY2l0eXxlbnwwfHx8fDE3NTg4MDMwMzB8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "futuristic city"
+    },
+    {
+      "id": "kirtan-avatar",
+      "description": "Portrait of a man smiling",
+      "imageUrl": "https://images.unsplash.com/photo-1560250097-0b93528c311a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxtYW4lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NjI3Mzg5NzR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "man portrait"
     }
   ]
 }
