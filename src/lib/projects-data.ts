@@ -49,5 +49,13 @@ export const projects: Project[] = [
     imageId: "project-7",
     description: "A personal AI assistant inspired by Jarvis from Iron Man, built with Python. It can perform various tasks like opening applications, searching the web, and providing real-time information.",
     githubLink: "https://github.com/kkbro07/jarvis"
+  },
+  {
+    id: "6",
+    title: "Face-Recognition",
+    category: "AI/ML Development",
+    imageId: "project-8",
+    description: "A Python-based face recognition system that can identify faces in real-time video streams and images, built using OpenCV and other machine learning libraries.",
+    githubLink: "https://github.com/kkbro07/Face-Recognition"
   }
 ];
