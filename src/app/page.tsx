@@ -14,6 +14,9 @@ import { BlogSection } from "@/components/home/blog-section";
 import { Separator } from "@/components/ui/separator";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { Github, Linkedin, Twitter } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const { resolvedTheme } = useTheme();
@@ -31,19 +34,19 @@ export default function Home() {
   const renderLinkedInBadge = () => {
     if (!mounted) {
       // Render a placeholder or nothing on the server/first-render
-      return <div className="w-[240px] h-[317px] mt-8"></div>; 
+      return <div className="w-[240px] h-[317px]"></div>; 
     }
 
     if (resolvedTheme === 'dark') {
       return (
-        <div key="dark-badge" className="badge-base LI-profile-badge mt-8" data-locale="en_US" data-size="medium" data-theme="dark" data-type="VERTICAL" data-vanity="kirtankalathiya" data-version="v1">
+        <div key="dark-badge" className="badge-base LI-profile-badge" data-locale="en_US" data-size="medium" data-theme="dark" data-type="VERTICAL" data-vanity="kirtankalathiya" data-version="v1">
             {/* The script will populate this */}
         </div>
       );
     }
     
     return (
-      <div key="light-badge" className="badge-base LI-profile-badge mt-8" data-locale="en_US" data-size="medium" data-theme="light" data-type="VERTICAL" data-vanity="kirtankalathiya" data-version="v1">
+      <div key="light-badge" className="badge-base LI-profile-badge" data-locale="en_US" data-size="medium" data-theme="light" data-type="VERTICAL" data-vanity="kirtankalathiya" data-version="v1">
           {/* The script will populate this */}
       </div>
     );
@@ -80,12 +83,29 @@ export default function Home() {
       <section className="py-16 sm:py-24 text-center">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
-              Find Me on LinkedIn
+              Find Me on Social Media
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-base text-muted-foreground sm:text-lg">
                 Connect with me to see my professional journey, achievements, and to network with other professionals in our industry.
             </p>
-            <div className="flex justify-center">
+            <div className="flex justify-center gap-8 mt-8">
+              <Link href="#" aria-label="GitHub">
+                <Button variant="outline" size="icon">
+                  <Github />
+                </Button>
+              </Link>
+              <Link href="#" aria-label="LinkedIn">
+                <Button variant="outline" size="icon">
+                  <Linkedin />
+                </Button>
+              </Link>
+              <Link href="#" aria-label="Twitter">
+                <Button variant="outline" size="icon">
+                  <Twitter />
+                </Button>
+              </Link>
+            </div>
+            <div className="flex justify-center mt-8">
               {renderLinkedInBadge()}
             </div>
         </div>
