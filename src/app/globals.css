@@ -114,4 +114,50 @@
   .animate-marquee-reverse {
     animation: marquee 40s linear infinite reverse;
   }
+
+  .carousel-container {
+    perspective: 1200px;
+    width: 100%;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .carousel {
+    position: relative;
+    width: 100%;
+    transform-style: preserve-3d;
+    animation: rotateCarousel 40s linear infinite;
+  }
+
+  .carousel-panel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: center;
+    margin-left: -100px; /* Half of panel width */
+    margin-top: -50px;  /* Half of panel height */
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: hsl(var(--secondary));
+    color: hsl(var(--secondary-foreground));
+    border-radius: var(--radius);
+    font-size: 1.5rem;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    backface-visibility: hidden;
+  }
+
+  @keyframes rotateCarousel {
+    from {
+      transform: rotateY(0deg);
+    }
+    to {
+      transform: rotateY(360deg);
+    }
+  }
 }
