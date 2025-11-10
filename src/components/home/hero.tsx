@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -7,6 +6,7 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Ticker } from "./ticker";
+import { ThemeToggle } from "../shared/theme-toggle";
 
 export function Hero() {
   const navItems = [
@@ -63,6 +63,7 @@ export function Hero() {
           className="col-start-1 row-start-1 self-start justify-self-end sm:col-start-2 sm:row-start-1 sm:justify-self-end sm:self-start"
         >
           <div className="flex items-center gap-4">
+            <ThemeToggle />
             <span className="font-mono text-xs sm:text-sm text-muted-foreground text-right">
               ■ Surat, Gujarat, India
             </span>

@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Footer } from "@/components/shared/footer";
 import { Toaster } from "@/components/ui/toaster";
+import { ThemeProvider } from "@/components/shared/theme-provider";
 
 const fontInter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const fontOswald = Oswald({
@@ -23,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
           "min-h-screen bg-background font-body antialiased",
@@ -31,11 +32,18 @@ export default function RootLayout({
           fontOswald.variable
         )}
       >
-        <div className="relative flex min-h-dvh flex-col">
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </div>
-        <Toaster />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="relative flex min-h-dvh flex-col">
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </div>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );
