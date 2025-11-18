@@ -1,7 +1,10 @@
 import type {NextConfig} from 'next';
+import createMDX from '@next/mdx'
 
+/** @type {import('next').NextConfig} */
 const nextConfig: NextConfig = {
   /* config options here */
+  pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -44,4 +47,8 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+const withMDX = createMDX({
+  // Add markdown plugins here, such as rehype-prism
+});
+
+export default withMDX(nextConfig);

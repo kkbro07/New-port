@@ -11,6 +11,7 @@ import { ThemeToggle } from "../shared/theme-toggle";
 export function Hero() {
   const navItems = [
     { href: "/#work", label: "Work" },
+    { href: "/blog", label: "Blog" },
     { href: "/#journey", label: "About" },
     { href: "/#skills", label: "Skills" },
     { href: "/#journey", label: "Experience" },
