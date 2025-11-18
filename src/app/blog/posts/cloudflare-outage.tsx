@@ -1,10 +1,21 @@
+
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Terminal } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function CloudflareOutagePost() {
   const image = PlaceHolderImages.find(p => p.id === 'cloudflare-outage-hero');
+
+  const references = [
+    { href: "https://www.tomshardware.com/news/live/cloudflare-outage-under-investigation-as-twitter-downdetector-go-down-company-confirms-global-network-issue-clone?utm_source=chatgpt.com", title: "Cloudflare outage under investigation as Twitter, Downdetector go down — company confirms Global Network issue" },
+    { href: "https://www.moneycontrol.com/technology/cloudflare-outage-hits-x-and-other-major-platforms-as-parts-of-the-internet-go-down-article-13683711.html?utm_source=chatgpt.com", title: "Cloudflare outage hits X and other major platforms as parts ..." },
+    { href: "https://www.techradar.com/pro/live/a-cloudflare-outage-is-taking-down-parts-of-the-internet?utm_source=chatgpt.com", title: "A Cloudflare outage is taking down parts of the internet - here's what we know so far" },
+    { href: "https://m.economictimes.com/news/international/global-trends/cloudflare-down-many-parts-of-internet-just-stopped-working/articleshow/125411650.cms?utm_source=chatgpt.com", title: "Cloudflare down: Many parts of internet just stopped working" },
+    { href: "https://www.cloudflarestatus.com/?utm_source=chatgpt.com", title: "Cloudflare Status" },
+    { href: "https://www.hindustantimes.com/india-news/cloudflare-faces-outage-disrupting-services-for-thousands-of-users-101763467617603.html?utm_source=chatgpt.com", title: "Cloudflare down for several users globally" },
+  ];
 
   return (
     <>
@@ -63,6 +74,19 @@ export default function CloudflareOutagePost() {
 
       <h2>Conclusion</h2>
       <p>Today&apos;s Cloudflare outage is a reminder of how critical—and fragile—the modern web’s infrastructure can be. While services are largely recovering, the incident shows how a single point of failure can disrupt major platforms that billions rely on daily. Stay tuned for updates as Cloudflare continues its investigation.</p>
+
+      <div className="mt-12 border-t pt-8">
+        <h2 className="text-2xl font-bold mb-4">References</h2>
+        <ul className="list-decimal list-inside space-y-2">
+          {references.map((ref, index) => (
+            <li key={index} className="text-muted-foreground">
+              <Link href={ref.href} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                {ref.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     </>
   );
 }
