@@ -1,0 +1,40 @@
+diff --git a/node_modules/next-mdx-remote/dist/index.js b/node_modules/next-mdx-remote/dist/index.js
+index 9370be9..5e554f6 100644
+--- a/node_modules/next-mdx-remote/dist/index.js
++++ b/node_modules/next-mdx-remote/dist/index.js
+@@ -104,7 +104,11 @@
+     throw new Error('The `components` prop is required when using `useMDXComponents` from `next-mdx-remote`.');
+   }
+   const MDXContent = React.useMemo(() => {
+-    const fullScope = {
++    const fullScope = Object.assign({
++      React,
++      ReactDOM,
++      'react/jsx-runtime': jsxRuntime,
++    }, {
+       ...options.scope,
+       ...options.mdxOptions?.scope
+     });
+diff --git a/node_modules/next-mdx-remote/dist/rsc.js b/node_modules/next-mdx-remote/dist/rsc.js
+index 8e458a2..f0f8a84 100644
+--- a/node_modules/next-mdx-remote/dist/rsc.js
++++ b/node_modules/next-mdx-remote/dist/rsc.js
+@@ -1,4 +1,5 @@
+ 'use strict';
++const React = require('react');
+ 
+ var jsxRuntime = require('react/jsx-runtime');
+ var mdx = require('@mdx-js/mdx');
+@@ -62,7 +63,11 @@
+   }
+ 
+   const MDXContent = React.useMemo(() => {
+-    const fullScope = {
++    const fullScope = Object.assign({
++      React,
++      ReactDOM,
++      'react/jsx-runtime': jsxRuntime,
++    }, {
+       ...options.scope,
+       ...options.mdxOptions?.scope
+     });
