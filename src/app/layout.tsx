@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 import { Inter, Oswald } from "next/font/google";
 import "./globals.css";
@@ -15,8 +16,8 @@ const fontOswald = Oswald({
 });
 
 export const metadata: Metadata = {
-  title: "Kirtan Kalathiya",
-  description: "Portfolio of Kirtan Kalathiya, a web designer and developer from Surat, India.",
+  title: "Kirtan Kalathiya - Web Designer & Developer",
+  description: "Portfolio of Kirtan Kalathiya, a web designer and developer from Surat, India, specializing in creating beautiful, functional, and intelligent digital experiences.",
   verification: {
     google: "3djwAsJalUA-JfNPlS0vR-AQNlCOpz38R4mQDePdY8I",
   },
@@ -50,6 +51,17 @@ export default function RootLayout({
     ]
   };
 
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "url": "https://kirtankalathiya.com",
+    "name": "Kirtan Kalathiya",
+    "author": {
+      "@type": "Person",
+      "name": "Kirtan Kalathiya"
+    }
+  };
+
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -57,6 +69,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
       </head>
       <body
