@@ -15,7 +15,7 @@ type BlogPostPageProps = {
   };
 };
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
   const posts = getAllPosts();
   return posts.map((post) => ({
     slug: post.slug,
@@ -23,7 +23,8 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps) {
-  const post = await getPostBySlug(params.slug);
+  // We fetch the post with its content here to get metadata
+  const post = await getPostBySlug(params.slug).catch(() => null);
   if (!post) {
     return {};
   }
@@ -42,7 +43,10 @@ export async function generateMetadata({ params }: BlogPostPageProps) {
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const post = await getPostBySlug(params.slug);
+  const post = await getPostBySlug(params.slug).catch((err) => {
+    console.error(err);
+    return null;
+  });
 
   if (!post) {
     notFound();

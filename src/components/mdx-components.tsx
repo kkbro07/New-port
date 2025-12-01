@@ -1,51 +1,18 @@
 
 "use client"
 
-import { compile, run } from '@mdx-js/mdx'
-import { useMDXComponents as useDefaultMDXComponents } from '@mdx-js/react'
-import * as provider from '@mdx-js/react'
-import { Fragment, useEffect, useState } from 'react'
+import { MDXRemote, type MDXRemoteProps } from 'next-mdx-remote'
 
-const useMDXComponents = (components: any) => {
-    const defaultComponents = useDefaultMDXComponents()
-    return { ...defaultComponents, ...components }
+// Custom components
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+
+const components: MDXRemoteProps['components'] = {
+  Alert: (props) => <Alert {...props} />,
+  AlertTitle: (props) => <AlertTitle {...props} />,
+  AlertDescription: (props) => <AlertDescription {...props} />,
+  // Add other custom components you want to use in MDX here
+};
+
+export function MDXContent({ source }: { source: any }) {
+    return <MDXRemote {...source} components={components} />
 }
-
-const mdxr = (code:any, components:any) => {
-  const scope = {
-    ...provider,
-    components,
-    useMDXComponents,
-  }
-
-  const { result } = run(code, scope)
-  return result
-}
-
-
-export function MDXContent({ source }: { source: string }) {
-    const [mdx, setMdx] = useState<any>()
-
-    useEffect(() => {
-        async function run() {
-            const file = await compile(source)
-            const code = String(file)
-            setMdx(code)
-        }
-        run()
-    }, [source])
-
-    if (!mdx) {
-        return null
-    }
-    
-    const components = useMDXComponents({})
-    const MDX = mdxr(mdx, components)
-
-    return (
-        <provider.MDXProvider components={components}>
-            <MDX />
-        </provider.MDXProvider>
-    )
-}
-
