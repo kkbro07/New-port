@@ -2,13 +2,12 @@
 import { getPostBySlug, getAllPosts } from "@/lib/blog";
 import { notFound } from "next/navigation";
 import { format } from "date-fns";
-import { ArrowLeft, Calendar, User } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Breadcrumb } from "@/components/shared/breadcrumb";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { MDXContent } from "@/components/mdx-components";
 
 type BlogPostPageProps = {
   params: {
@@ -24,7 +23,7 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps) {
-  const post = getPostBySlug(params.slug);
+  const post = await getPostBySlug(params.slug);
   if (!post) {
     return {};
   }
@@ -42,8 +41,8 @@ export async function generateMetadata({ params }: BlogPostPageProps) {
   };
 }
 
-export default function BlogPostPage({ params }: BlogPostPageProps) {
-  const post = getPostBySlug(params.slug);
+export default async function BlogPostPage({ params }: BlogPostPageProps) {
+  const post = await getPostBySlug(params.slug);
 
   if (!post) {
     notFound();
@@ -96,8 +95,6 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
     }]
   }
 
-  const PostContent = post.component;
-
   return (
     <>
       <script
@@ -143,7 +140,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
           </header>
 
           <article className="prose prose-lg dark:prose-invert max-w-none prose-headings:font-headline prose-headings:tracking-tighter prose-headings:text-foreground prose-a:text-primary hover:prose-a:underline prose-blockquote:border-primary prose-blockquote:text-muted-foreground prose-strong:text-foreground">
-            <PostContent />
+            <MDXContent source={post.content} />
           </article>
           
           {recentPosts.length > 0 && (
