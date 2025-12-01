@@ -23,8 +23,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps) {
-  // We fetch the post with its content here to get metadata
-  const post = await getPostBySlug(params.slug).catch(() => null);
+  // getPostBySlug is async now, but generateMetadata can be async
+  const post = await getPostBySlug(params.slug);
   if (!post) {
     return {};
   }
@@ -43,10 +43,7 @@ export async function generateMetadata({ params }: BlogPostPageProps) {
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const post = await getPostBySlug(params.slug).catch((err) => {
-    console.error(err);
-    return null;
-  });
+  const post = await getPostBySlug(params.slug);
 
   if (!post) {
     notFound();
@@ -142,6 +139,19 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 </div>
             </div>
           </header>
+          
+          {postImage && (
+             <div className="relative aspect-video mb-12 rounded-lg overflow-hidden shadow-lg">
+                <Image
+                    src={postImage.imageUrl}
+                    alt={post.metadata.title}
+                    fill
+                    className="object-cover"
+                    data-ai-hint={postImage.imageHint}
+                />
+             </div>
+          )}
+
 
           <article className="prose prose-lg dark:prose-invert max-w-none prose-headings:font-headline prose-headings:tracking-tighter prose-headings:text-foreground prose-a:text-primary hover:prose-a:underline prose-blockquote:border-primary prose-blockquote:text-muted-foreground prose-strong:text-foreground">
             <MDXContent source={post.content} />

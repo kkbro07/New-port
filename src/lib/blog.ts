@@ -14,7 +14,7 @@ export type PostMetadata = {
 export type Post = {
   slug: string;
   metadata: PostMetadata;
-  content: any; // Now it will hold the serialized MDX content
+  content: any; // Updated to be compatible with serialized content
 };
 
 const postsDirectory = path.join(process.cwd(), 'src/app/blog/posts');
