@@ -1,6 +1,3 @@
-
-"use client"
-
 import { MDXRemote, type MDXRemoteProps } from 'next-mdx-remote'
 import Image from 'next/image';
 
