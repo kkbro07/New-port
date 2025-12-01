@@ -1,7 +1,7 @@
-
 import { default as CloudflareOutage } from '@/app/blog/posts/cloudflare-outage';
 import { default as SeoBasics } from '@/app/blog/posts/seo-basics';
 import { default as DigitalMarketingIntro } from '@/app/blog/posts/digital-marketing-intro';
+import { default as VoiceSearchOptimization } from '@/app/blog/posts/voice-search-optimization';
 
 export type PostMetadata = {
   title: string;
@@ -51,4 +51,17 @@ export const posts: Post[] = [
     },
     component: DigitalMarketingIntro,
   },
+  {
+    slug: 'voice-search-optimization',
+    metadata: {
+      title: "Voice Search Optimization in 2025: The New SEO Frontier",
+      date: "2025-08-27",
+      author: "Kirtan Kalathiya",
+      excerpt: "Voice search is rapidly changing how users discover content online. By 2025, over half of all online searches could be voice-driven. Learn how to optimize for this new frontier.",
+      imageId: "voice-search-hero",
+    },
+    component: VoiceSearchOptimization,
+  },
 ];
+
+    

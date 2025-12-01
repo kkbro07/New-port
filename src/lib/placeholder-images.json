@@ -89,6 +89,12 @@
       "description": "A desk with a laptop displaying charts and graphs, surrounded by marketing icons.",
       "imageUrl": "https://images.unsplash.com/photo-1557862921-37829c790f19?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxkaWdpdGFsJTIwbWFya2V0aW5nfGVufDB8fHx8MTc2MTIzMTAyNXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "digital marketing"
+    },
+    {
+      "id": "voice-search-hero",
+      "description": "A smart speaker with a glowing blue light on a wooden surface.",
+      "imageUrl": "https://images.unsplash.com/photo-1534536281715-e28d76689b4d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx2b2ljZSUyMHNlYXJjaHxlbnwwfHx8fDE3NjE3NDU4NDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "voice search"
     }
   ]
 }
