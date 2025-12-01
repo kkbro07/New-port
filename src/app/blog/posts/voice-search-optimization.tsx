@@ -7,7 +7,7 @@ export default function VoiceSearchOptimizationPost() {
   return (
     <>
       <p className="lead mb-8">
-        “Hey Siri, find me the best eco-friendly laptop under $1000.” This isn’t a
+        “Hey Siri, find me the best eco-friendly laptop under $1000.” This isn't a
         hypothetical scenario anymore—voice search is rapidly changing how users
         discover content online. By 2025, over half of all online searches could
         be voice-driven, and businesses that ignore this shift risk losing
@@ -15,7 +15,7 @@ export default function VoiceSearchOptimizationPost() {
       </p>
 
       <p>
-        Voice search isn’t just a different input method; it’s a paradigm shift
+        Voice search isn't just a different input method; it's a paradigm shift
         in how people search, combining conversational language, context, and
         hyper-local intent. The brands that thrive are the ones that understand
         user intent and query structure better than ever before.
@@ -162,7 +162,7 @@ export default function VoiceSearchOptimizationPost() {
       </blockquote>
        <Alert className="my-8">
         <Mic className="h-4 w-4" />
-        <AlertTitle>Takeaway</Title>
+        <AlertTitle>Takeaway</AlertTitle>
         <AlertDescription>
           Voice-first marketing is multi-platform, spanning mobile, smart
           devices, and AI assistants.
@@ -197,7 +197,7 @@ export default function VoiceSearchOptimizationPost() {
       </blockquote>
       <Alert className="my-8">
         <Mic className="h-4 w-4" />
-        <AlertTitle>Takeaway</Title>
+        <AlertTitle>Takeaway</AlertTitle>
         <AlertDescription>
           Voice search is measurable, but requires adapted KPIs to truly
           understand its impact.
@@ -206,10 +206,14 @@ export default function VoiceSearchOptimizationPost() {
 
       <h2>Closing Thought</h2>
       <p>
-        SEO in 2025 isn’t just about ranking on Google—it’s about being
+        SEO in 2025 isn't just about ranking on Google—it's about being
         discoverable anywhere your audience speaks, searches, or asks for help.
-        Voice search isn’t a trend; it’s the next frontier of digital
-        marketing. The brands that master conversational content, local SEO,
+        Voice search isn't a trend; it's the next frontier of digital
+        marketing.
+      </p>
+
+      <p>
+        The brands that master conversational content, local SEO,
         and AI assistant integration will dominate search results and capture
         the rapidly growing voice-driven audience.
       </p>
@@ -223,4 +227,3 @@ export default function VoiceSearchOptimizationPost() {
     </>
   );
 }
-    
