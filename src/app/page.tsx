@@ -24,6 +24,7 @@ import { LinkedInBadge } from "@/components/home/linkedin-badge";
 import { ExperienceSection } from "@/components/home/experience-section";
 import { SkillsSection } from "@/components/home/skills-section";
 import { FaqSection } from "@/components/home/faq-section";
+import { FeaturedProjectCard } from "@/components/home/featured-project-card";
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
@@ -37,28 +38,56 @@ export default function Home() {
     return acc;
   }, {} as Record<string, ImagePlaceholder>);
 
+  const featuredProjects = projects.filter((project) => project.featured);
+  const otherProjects = projects.filter((project) => !project.featured);
+
   return (
     <>
       <Hero />
       <div id="work" className="container mx-auto px-4 pt-16 sm:px-6 lg:px-8 sm:pt-24">
         <ProjectSectionHeader />
 
-        <section className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 pb-16 sm:pb-24">
-          {projects.map((project, index) => {
-            const image = imageMap[project.imageId];
+        <section className="flex flex-col gap-12 sm:gap-16">
+          {featuredProjects.map((project, index) => {
+             const image = imageMap[project.imageId];
             return (
               <motion.div
                 key={project.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.15, duration: 0.5, ease: "easeOut" }}
-                className="fade-in-stagger"
+                transition={{ delay: index * 0.1, duration: 0.5, ease: "easeOut" }}
               >
-                <ProjectCard project={project} image={image} />
+                <FeaturedProjectCard project={project} image={image} />
               </motion.div>
-            );
+            )
           })}
         </section>
+
+        {otherProjects.length > 0 && (
+          <>
+            <div className="my-16 sm:my-24 text-center">
+              <h3 className="font-headline text-3xl font-bold tracking-tighter">
+                More Projects
+              </h3>
+            </div>
+            <section className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 pb-16 sm:pb-24">
+              {otherProjects.map((project, index) => {
+                const image = imageMap[project.imageId];
+                return (
+                  <motion.div
+                    key={project.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1, duration: 0.5, ease: "easeOut" }}
+                    className="fade-in-stagger"
+                  >
+                    <ProjectCard project={project} image={image} />
+                  </motion.div>
+                );
+              })}
+            </section>
+          </>
+        )}
       </div>
       <AboutSection />
       <SkillsSection />

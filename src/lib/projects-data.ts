@@ -15,6 +15,7 @@ export const projects: Project[] = [
     title: "ONLINE FOOD DELIVERY MANAGEMENT",
     category: "Web Development",
     imageId: "project-1",
+    featured: true,
     description: "Developed a food delivery platform using HTML for the frontend, MySQL for the database, and PHP for the backend. The system allows users to browse restaurant menus, place orders, and track deliveries. Admins can manage orders, update menu items, and handle customer requests. The application is hosted on an XAMPP server for local development, ensuring smooth interaction between the frontend and backend components.",
     githubLink: "https://github.com/kkbro07/project"
   },
@@ -23,6 +24,7 @@ export const projects: Project[] = [
     title: "RESTRO AND CAFE MANAGEMENT SYSTEM",
     category: "Web Development",
     imageId: "project-2",
+    featured: true,
     description: "Developed a restaurant/café management system using ASP.NET and SQL Server. The system allows for efficient order management, billing, and inventory tracking, with features like table management and customer service. Admins can manage staff schedules, view sales analytics, and generate reports. The system is designed to streamline operations and improve customer service.",
     githubLink: "https://github.com/kkbro07/Food_Ordering_Project"
   },
