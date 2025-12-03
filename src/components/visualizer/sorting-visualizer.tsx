@@ -29,7 +29,7 @@ export function SortingVisualizer({ state, dispatch }: SortingVisualizerProps) {
     const generateRandomArray = useCallback((numBars: number) => {
         const newArray: number[] = [];
         for (let i = 0; i < numBars; i++) {
-            newArray.push(Math.floor(Math.random() * (500 - 20 + 1)) + 20);
+            newArray.push(Math.floor(Math.random() * (99 - 5 + 1)) + 5);
         }
         dispatch({ type: 'RESET', payload: { array: newArray, numberOfBars: numBars } });
     }, [dispatch]);
