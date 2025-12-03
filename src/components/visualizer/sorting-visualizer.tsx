@@ -1,25 +1,31 @@
 
 "use client";
 
-import React, { useState, useEffect, useReducer, useCallback } from 'react';
+import React, { useState, useEffect, useReducer, useCallback, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup, SelectLabel } from '@/components/ui/select';
-import { Play, Pause, RotateCcw, FastForward, Rewind } from 'lucide-react';
-import { Card, CardContent } from '../ui/card';
+import { Play, Pause, RotateCcw } from 'lucide-react';
+import { Card } from '../ui/card';
 import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // --- Color Palette ---
-// These will be defined in globals.css and accessed via CSS variables
 const BAR_COLOR = 'hsl(var(--primary))';
-const COMPARING_COLOR = 'hsl(var(--chart-2))'; // yellow
-const SWAPPING_COLOR = 'hsl(var(--destructive))'; // red
-const SORTED_COLOR = 'hsl(var(--chart-1))'; // green
+const COMPARING_COLOR = 'hsl(var(--chart-2))';
+const SWAPPING_COLOR = 'hsl(var(--destructive))';
+const SORTED_COLOR = 'hsl(var(--chart-1))';
 
 // --- State Management ---
+type AnimationStep = {
+  type: 'compare' | 'swap' | 'sorted';
+  indices: number[];
+  values?: number[];
+};
+
 type State = {
   array: number[];
-  animations: (string | number)[][];
+  animations: AnimationStep[];
   currentStep: number;
   isSorting: boolean;
   isPaused: boolean;
@@ -29,197 +35,196 @@ type State = {
   algorithm: string;
 };
 
-type Action = 
-  | { type: 'SET_ARRAY'; payload: number[] }
-  | { type: 'SET_ANIMATIONS'; payload: (string | number)[][] }
-  | { type: 'START_SORTING' }
-  | { type: 'PAUSE_SORTING' }
+type Action =
+  | { type: 'SET_CONFIG'; payload: Partial<Omit<State, 'array' | 'animations'>> }
+  | { type: 'START_SORT'; payload: { array: number[], animations: AnimationStep[] } }
+  | { type: 'PAUSE_RESUME' }
   | { type: 'STEP_FORWARD' }
-  | { type: 'RESET' }
-  | { type: 'SORT_COMPLETE' }
-  | { type: 'SET_CONFIG'; payload: Partial<Pick<State, 'numberOfBars' | 'animationSpeed' | 'algorithm'>> };
+  | { type: 'RESET'; payload: { array: number[], numberOfBars: number } }
+  | { type: 'SORT_COMPLETE' };
 
-const initialState: State = {
+const initialStateFactory = (numberOfBars: number): State => ({
   array: [],
   animations: [],
-  currentStep: 0,
+  currentStep: -1,
   isSorting: false,
   isPaused: false,
   isSorted: false,
-  numberOfBars: 50,
+  numberOfBars: numberOfBars,
   animationSpeed: 50,
   algorithm: 'bubbleSort',
-};
+});
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
-    case 'SET_ARRAY':
-      return { ...state, array: action.payload, isSorted: false, currentStep: 0, animations: [] };
-    case 'SET_ANIMATIONS':
-      return { ...state, animations: action.payload };
-    case 'START_SORTING':
-      return { ...state, isSorting: true, isPaused: false, isSorted: false };
-    case 'PAUSE_SORTING':
-        return { ...state, isPaused: !state.isPaused };
-    case 'STEP_FORWARD':
-      if(state.currentStep >= state.animations.length) {
-        return { ...state, isSorting: false, isPaused: false, isSorted: true };
-      }
-      return { ...state, currentStep: state.currentStep + 1 };
-    case 'RESET':
-      return { ...initialState, array: [], numberOfBars: state.numberOfBars, animationSpeed: state.animationSpeed, algorithm: state.algorithm };
-    case 'SORT_COMPLETE':
-        return { ...state, isSorting: false, isPaused: false, isSorted: true, currentStep: 0, animations: [] };
     case 'SET_CONFIG':
       return { ...state, ...action.payload };
+    case 'START_SORT':
+      return {
+        ...state,
+        array: action.payload.array,
+        animations: action.payload.animations,
+        currentStep: 0,
+        isSorting: true,
+        isPaused: false,
+        isSorted: false,
+      };
+    case 'PAUSE_RESUME':
+      return { ...state, isPaused: !state.isPaused };
+    case 'STEP_FORWARD':
+      return { ...state, currentStep: state.currentStep + 1 };
+    case 'RESET':
+      return {
+        ...initialStateFactory(action.payload.numberOfBars),
+        array: action.payload.array,
+        numberOfBars: action.payload.numberOfBars,
+        animationSpeed: state.animationSpeed,
+        algorithm: state.algorithm,
+      };
+    case 'SORT_COMPLETE':
+      return { ...state, isSorting: false, isPaused: false, isSorted: true };
     default:
       return state;
   }
 }
 
-
 // --- Sorting Algorithms ---
-const getBubbleSortAnimations = (array: number[]): (string | number)[][] => {
-    const animations: (string | number)[][] = [];
+const getBubbleSortAnimations = (array: number[]): AnimationStep[] => {
+    const animations: AnimationStep[] = [];
     if (array.length <= 1) return animations;
     const auxiliaryArray = array.slice();
     for (let i = 0; i < auxiliaryArray.length - 1; i++) {
         for (let j = 0; j < auxiliaryArray.length - i - 1; j++) {
-            animations.push(['compare', j, j + 1]);
+            animations.push({ type: 'compare', indices: [j, j + 1] });
             if (auxiliaryArray[j] > auxiliaryArray[j + 1]) {
-                animations.push(['swap', j, auxiliaryArray[j + 1]]);
-                animations.push(['swap', j + 1, auxiliaryArray[j]]);
+                animations.push({
+                  type: 'swap',
+                  indices: [j, j + 1],
+                  values: [auxiliaryArray[j+1], auxiliaryArray[j]]
+                });
                 [auxiliaryArray[j], auxiliaryArray[j + 1]] = [auxiliaryArray[j + 1], auxiliaryArray[j]];
             }
         }
-        animations.push(['sorted', auxiliaryArray.length - 1 - i]);
+        animations.push({ type: 'sorted', indices: [auxiliaryArray.length - 1 - i]});
     }
-    animations.push(['sorted', 0]);
+    animations.push({ type: 'sorted', indices: [0]});
     return animations;
 };
 
-
 // --- Main Component ---
 export function SortingVisualizer() {
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const isMobile = useIsMobile();
+    const [state, dispatch] = useReducer(reducer, initialStateFactory(isMobile ? 20 : 50));
     const { array, animations, currentStep, isSorting, isPaused, isSorted, numberOfBars, animationSpeed, algorithm } = state;
-    const containerRef = React.useRef<HTMLDivElement>(null);
     
-    const resetArray = useCallback(() => {
+    // Derived state for the array being displayed, which changes during animations
+    const [displayArray, setDisplayArray] = useState<number[]>([]);
+    const [barColors, setBarColors] = useState<string[]>([]);
+
+    const generateRandomArray = useCallback(() => {
         const newArray: number[] = [];
         for (let i = 0; i < numberOfBars; i++) {
-            newArray.push(Math.floor(Math.random() * (500 - 5 + 1)) + 5);
+            newArray.push(Math.floor(Math.random() * (500 - 20 + 1)) + 20);
         }
-        dispatch({ type: 'RESET' });
-        dispatch({ type: 'SET_ARRAY', payload: newArray });
-
-        const arrayBars = document.getElementsByClassName('array-bar') as HTMLCollectionOf<HTMLElement>;
-        for(let i=0; i<arrayBars.length; i++) {
-            if(arrayBars[i]) arrayBars[i].style.backgroundColor = BAR_COLOR;
-        }
-
+        dispatch({ type: 'RESET', payload: { array: newArray, numberOfBars } });
+        setDisplayArray(newArray);
     }, [numberOfBars]);
 
     useEffect(() => {
-        resetArray();
-    }, [numberOfBars, resetArray]);
+        generateRandomArray();
+    }, [numberOfbars]);
 
     const handleSort = () => {
-        let anims: (string|number)[][] = [];
+        if (isSorted) return;
+        const originalArray = array.slice();
+        let anims: AnimationStep[] = [];
         switch (algorithm) {
             case 'bubbleSort':
-                anims = getBubbleSortAnimations(array);
+                anims = getBubbleSortAnimations(originalArray);
                 break;
             default:
                 break;
         }
-        dispatch({ type: 'SET_ANIMATIONS', payload: anims });
-        dispatch({ type: 'START_SORTING' });
+        dispatch({ type: 'START_SORT', payload: { array: originalArray, animations: anims } });
     };
-    
+
+    const handleReset = () => {
+        generateRandomArray();
+    }
+
+    // Animation Effect
     useEffect(() => {
-        if (!isSorting || isPaused || currentStep >= animations.length) {
-            if (isSorting && currentStep >= animations.length) {
+        if (!isSorting || isPaused) return;
+
+        const timeout = setTimeout(() => {
+            if (currentStep >= animations.length) {
                 dispatch({ type: 'SORT_COMPLETE' });
+                return;
             }
-            return;
-        }
 
-        const timer = setTimeout(() => {
-            dispatch({ type: 'STEP_FORWARD' });
-        }, 101 - animationSpeed);
-        
-        return () => clearTimeout(timer);
-    }, [currentStep, isSorting, isPaused, animations.length, animationSpeed]);
+            const animationStep = animations[currentStep];
+            const newDisplayArray = [...displayArray];
+            const newBarColors = new Array(numberOfBars).fill(BAR_COLOR);
 
-
-    useEffect(() => {
-      const arrayBars = Array.from(document.getElementsByClassName('array-bar') as HTMLCollectionOf<HTMLElement>);
-      if(!arrayBars.length) return;
-      if (isSorted) {
-          arrayBars.forEach((bar, index) => {
-              setTimeout(() => {
-                  bar.style.backgroundColor = SORTED_COLOR;
-              }, index * 5);
-          });
-          return;
-      }
-      if (currentStep === 0 && !isSorting) {
-          arrayBars.forEach(bar => bar.style.backgroundColor = BAR_COLOR);
-          return;
-      }
-      if (animations.length === 0 || currentStep === 0) return;
-  
-      const prevAnimation = animations[currentStep - 1];
-      const [prevAction, prevBarOne, prevBarTwo] = prevAnimation;
-      // Revert previous comparison colors
-      if (prevAction === 'compare') {
-          if(arrayBars[prevBarOne as number]) arrayBars[prevBarOne as number].style.backgroundColor = BAR_COLOR;
-          if(arrayBars[prevBarTwo as number]) arrayBars[prevBarTwo as number].style.backgroundColor = BAR_COLOR;
-      }
-
-      if (currentStep >= animations.length) return;
-      
-      const [action, barOneIdx, barTwoVal] = animations[currentStep];
-
-      switch(action) {
-          case 'compare':
-              if(arrayBars[barOneIdx as number]) arrayBars[barOneIdx as number].style.backgroundColor = COMPARING_COLOR;
-              if(arrayBars[barTwoVal as number]) arrayBars[barTwoVal as number].style.backgroundColor = COMPARING_COLOR;
-              break;
-          case 'swap':
-              if(arrayBars[barOneIdx as number]) {
-                const bar = arrayBars[barOneIdx as number];
-                bar.style.height = `${barTwoVal}px`;
-                bar.style.backgroundColor = SWAPPING_COLOR;
-                if (bar.firstChild && bar.firstChild.nodeType === Node.ELEMENT_NODE) {
-                    const span = bar.firstChild as HTMLElement;
-                    if(span.tagName === 'SPAN') {
-                        span.innerText = barTwoVal.toString();
-                    }
+            animations.slice(0, currentStep + 1).forEach(step => {
+                if (step.type === 'sorted') {
+                    step.indices.forEach(i => newBarColors[i] = SORTED_COLOR);
                 }
+            });
+
+            if (animationStep) {
+              switch (animationStep.type) {
+                case 'compare':
+                  animationStep.indices.forEach(i => {
+                    if (newBarColors[i] !== SORTED_COLOR) newBarColors[i] = COMPARING_COLOR;
+                  });
+                  break;
+                case 'swap':
+                  const [index1, index2] = animationStep.indices;
+                  const [val1, val2] = animationStep.values!;
+                  newDisplayArray[index1] = val1;
+                  newDisplayArray[index2] = val2;
+                  if (newBarColors[index1] !== SORTED_COLOR) newBarColors[index1] = SWAPPING_COLOR;
+                  if (newBarColors[index2] !== SORTED_COLOR) newBarColors[index2] = SWAPPING_COLOR;
+                  break;
+                case 'sorted':
+                  animationStep.indices.forEach(i => newBarColors[i] = SORTED_COLOR);
+                  break;
               }
-              break;
-          case 'sorted':
-              if(arrayBars[barOneIdx as number]) {
-                arrayBars[barOneIdx as number].style.backgroundColor = SORTED_COLOR;
-              }
-              break;
-      }
+            }
+            
+            setDisplayArray(newDisplayArray);
+            setBarColors(newBarColors);
 
-  }, [currentStep, animations, isSorting, isSorted]);
+            dispatch({ type: 'STEP_FORWARD' });
 
+        }, 101 - animationSpeed);
 
-    const isBusy = isSorting || isSorted;
+        return () => clearTimeout(timeout);
+    }, [currentStep, isSorting, isPaused, animations, displayArray, animationSpeed, numberOfBars]);
+
+    // Final "sorted" flash effect
+    useEffect(() => {
+        if (isSorted) {
+            const newBarColors = new Array(numberOfBars).fill(SORTED_COLOR);
+            setBarColors(newBarColors);
+        } else {
+            const newBarColors = new Array(numberOfBars).fill(BAR_COLOR);
+            setBarColors(newBarColors);
+        }
+    }, [isSorted, numberOfBars]);
+
+    const isBusy = isSorting;
+    const barWidth = useMemo(() => Math.max(800 / numberOfBars, 2), [numberOfBars]);
 
     return (
         <div className="flex flex-col items-center w-full gap-4">
             <Card className="w-full max-w-5xl p-4">
-              <div className="flex flex-wrap items-center justify-between gap-4">
-                  <div className="flex flex-wrap items-center gap-4">
-                      <Select 
-                          onValueChange={(value) => dispatch({ type: 'SET_CONFIG', payload: { algorithm: value }})} 
-                          defaultValue={algorithm} 
+              <div className="flex flex-col sm:flex-row flex-wrap items-center justify-between gap-4">
+                  <div className="flex flex-wrap items-center justify-center gap-4">
+                      <Select
+                          onValueChange={(value) => dispatch({ type: 'SET_CONFIG', payload: { algorithm: value }})}
+                          defaultValue={algorithm}
                           disabled={isBusy}
                       >
                           <SelectTrigger className="w-[180px]">
@@ -240,32 +245,26 @@ export function SortingVisualizer() {
                               </SelectGroup>
                           </SelectContent>
                       </Select>
-                      <Button onClick={resetArray} disabled={isSorting}>
+                      <Button onClick={handleReset} disabled={isSorting}>
                           Random Array
                       </Button>
                   </div>
-                  
+
                   <div className="flex items-center gap-2">
-                       <Button variant="ghost" size="icon" disabled>
-                           <Rewind />
-                       </Button>
-                       <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          onClick={() => isSorting ? dispatch({ type: 'PAUSE_SORTING' }) : handleSort()}
+                       <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => isSorting ? dispatch({ type: 'PAUSE_RESUME' }) : handleSort()}
                           disabled={isSorted}
                         >
                           {isSorting && !isPaused ? <Pause /> : <Play />}
                        </Button>
-                       <Button variant="ghost" size="icon" disabled>
-                           <FastForward />
-                       </Button>
-                       <Button variant="ghost" size="icon" onClick={resetArray}>
+                       <Button variant="ghost" size="icon" onClick={handleReset}>
                            <RotateCcw />
                        </Button>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-4">
+                  <div className="flex flex-wrap items-center justify-center gap-4">
                       <div className="flex items-center gap-2">
                           <label className="text-sm font-medium whitespace-nowrap">Size</label>
                           <Slider
@@ -282,7 +281,7 @@ export function SortingVisualizer() {
                               value={[animationSpeed]}
                               onValueChange={(value) => dispatch({ type: 'SET_CONFIG', payload: { animationSpeed: value[0] }})}
                               min={1} max={100} step={1}
-                              disabled={isSorting}
+                              disabled={isSorting && !isPaused}
                               className="w-24"
                           />
                       </div>
@@ -290,18 +289,21 @@ export function SortingVisualizer() {
               </div>
             </Card>
 
-            <Card ref={containerRef} className="w-full max-w-5xl h-[600px] p-4 flex items-end justify-center gap-1 overflow-hidden">
-                {array.map((value, idx) => (
+            <Card className="w-full max-w-5xl h-[600px] p-4 flex items-end justify-center gap-1 overflow-hidden">
+                {displayArray.map((value, idx) => (
                     <div
-                        className="array-bar relative rounded-t-sm transition-all duration-150"
+                        className="array-bar group relative rounded-t-sm transition-colors duration-150"
                         key={idx}
                         style={{
-                            backgroundColor: BAR_COLOR,
+                            backgroundColor: barColors[idx] || BAR_COLOR,
                             height: `${value}px`,
-                            width: `${Math.max(800 / numberOfBars, 2)}px`,
+                            width: `${barWidth}px`,
                         }}>
                             {numberOfBars <= 50 && (
-                                <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-medium">
+                                <span className={cn(
+                                    "absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-medium text-muted-foreground",
+                                    barColors[idx] !== BAR_COLOR && "text-foreground font-bold"
+                                )}>
                                     {value}
                                 </span>
                             )}
@@ -319,5 +321,5 @@ export function SortingVisualizer() {
             </Card>
         </div>
     );
-
+}
     
