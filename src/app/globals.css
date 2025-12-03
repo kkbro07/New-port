@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -24,6 +25,8 @@
     --input: 240 5.9% 90%;
     --ring: 240 5.9% 10%;
     --radius: 0.5rem;
+    --chart-1: 142.1 76.2% 36.3%;
+    --chart-2: 43.6 95.7% 50.1%;
   }
 
   .dark {
@@ -46,6 +49,8 @@
     --border: 0 0% 20%;
     --input: 0 0% 20%;
     --ring: 0 0% 83%;
+    --chart-1: 142.1 70.6% 45.3%;
+    --chart-2: 43.6 95.7% 55.1%;
   }
 }
 
@@ -163,3 +168,5 @@
     }
   }
 }
+
+    
