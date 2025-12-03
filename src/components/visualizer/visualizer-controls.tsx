@@ -107,16 +107,6 @@ export function VisualizerControls({
 
                     <div className="flex flex-wrap items-center justify-center gap-4">
                         <div className="flex items-center gap-2">
-                            <label className="text-sm font-medium whitespace-nowrap">Size</label>
-                            <Slider
-                                value={[numberOfBars]}
-                                onValueChange={(value) => dispatch({ type: 'SET_CONFIG', payload: { numberOfBars: value[0] }})}
-                                min={5} max={15} step={1}
-                                disabled={isBusy}
-                                className="w-24"
-                            />
-                        </div>
-                        <div className="flex items-center gap-2">
                             <label className="text-sm font-medium whitespace-nowrap">Speed</label>
                             <Select
                                 onValueChange={(value) => dispatch({ type: 'SET_CONFIG', payload: { animationSpeed: Number(value) }})}
