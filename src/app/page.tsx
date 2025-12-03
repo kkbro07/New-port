@@ -10,10 +10,10 @@ import { type ImagePlaceholder } from "@/lib/placeholder-images";
 import { AboutSection } from "@/components/home/about-section";
 import { ContactSection } from "@/components/home/contact-section";
 import { ProjectSectionHeader } from "@/components/home/project-section-header";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Separator } from "@/components/ui/separator";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { Github, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,15 @@ import { ResumeSection } from "@/components/home/resume-section";
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
+  
+  const moreProjectsRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: moreProjectsScrollYProgress } = useScroll({
+    target: moreProjectsRef,
+    offset: ["start end", "end start"],
+  });
+  const moreProjectsY = useTransform(moreProjectsScrollYProgress, [0, 1], [-100, 100]);
+  const moreProjectsOpacity = useTransform(moreProjectsScrollYProgress, [0.4, 0.6], [0, 1]);
+
 
   useEffect(() => {
     setMounted(true);
@@ -76,11 +85,15 @@ export default function Home() {
 
         {otherProjects.length > 0 && (
           <>
-            <div className="my-16 sm:my-24 text-center">
+            <motion.div 
+              ref={moreProjectsRef}
+              style={{ y: moreProjectsY, opacity: moreProjectsOpacity }}
+              className="my-16 sm:my-24 text-center"
+            >
               <h3 className="font-headline text-3xl font-bold tracking-tighter">
                 More Projects
               </h3>
-            </div>
+            </motion.div>
             <section className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 pb-16 sm:pb-24">
               {otherProjects.map((project, index) => {
                 const image = imageMap[project.imageId];
