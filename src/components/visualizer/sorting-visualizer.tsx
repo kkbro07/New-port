@@ -91,18 +91,18 @@ export function SortingVisualizer({ state, dispatch }: SortingVisualizerProps) {
         setCustomArrayInput('');
     }
 
-    // Animation Effect
-    useEffect(() => {
+    const updateVisuals = useCallback((stepIndex: number) => {
         let tempArray = array.slice();
         const colors = new Array(numberOfBars).fill('hsl(var(--primary))');
 
-        if (currentStep === -1) {
+        if (stepIndex === -1) {
             setDisplayArray(tempArray);
             setBarColors(colors);
             return;
         }
 
-        for (let i = 0; i <= currentStep; i++) {
+        for (let i = 0; i <= stepIndex; i++) {
+            if(i >= animations.length) continue;
             const step = animations[i];
             if (step.type === 'swap') {
                 const [idx1, idx2] = step.indices;
@@ -113,15 +113,16 @@ export function SortingVisualizer({ state, dispatch }: SortingVisualizerProps) {
             }
         }
         
-        for(let i = 0; i < animations.length; i++) {
-            if (animations[i].type === 'sorted' && i <= currentStep) {
+        for(let i = 0; i <= stepIndex; i++) {
+             if(i >= animations.length) continue;
+            if (animations[i].type === 'sorted') {
                 animations[i].indices.forEach(idx => {
                     if (idx < colors.length) colors[idx] = 'hsl(var(--chart-1))';
                 });
             }
         }
         
-        const finalStep = animations[currentStep];
+        const finalStep = animations[stepIndex];
         if (finalStep) {
             switch (finalStep.type) {
                 case 'compare':
@@ -140,8 +141,12 @@ export function SortingVisualizer({ state, dispatch }: SortingVisualizerProps) {
         
         setDisplayArray(tempArray);
         setBarColors(colors);
+    }, [array, animations, numberOfBars]);
 
-    }, [currentStep, array, animations, numberOfBars]);
+    // Animation Effect for both auto-play and manual steps
+    useEffect(() => {
+        updateVisuals(currentStep);
+    }, [currentStep, updateVisuals]);
 
 
     // This effect handles the automatic playback of the animation.
