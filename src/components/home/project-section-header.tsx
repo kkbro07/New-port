@@ -7,25 +7,17 @@ export function ProjectSectionHeader() {
   const targetRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: targetRef,
-    offset: ["start end", "end center"],
+    offset: ["start end", "end start"],
   });
 
-  // Animate from blur(8px) to blur(0px)
-  const blur = useTransform(scrollYProgress, [0, 1], [8, 0]);
-  // Animate from opacity(0) to opacity(1)
-  const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
-  // Parallax for vertical movement
-  const y = useTransform(scrollYProgress, [0, 1], [50, 0]);
+  const opacity = useTransform(scrollYProgress, [0.1, 0.4], [0, 1]);
+  const scale = useTransform(scrollYProgress, [0.1, 0.5], [0.9, 1]);
+  const y = useTransform(scrollYProgress, [0.1, 0.7], [-100, 0]);
 
   return (
-    <section ref={targetRef} className="relative mb-12 sm:mb-16 text-center h-48 sm:h-64 flex flex-col justify-center">
+    <section ref={targetRef} className="relative mb-12 sm:mb-16 text-center h-48 sm:h-64 flex flex-col justify-center overflow-hidden">
         <motion.div 
-            style={{ y, opacity, filter: useTransform(blur, (v) => `blur(${v}px)`) }}
-            transition={{
-                y: { type: "spring", stiffness: 100, damping: 30, restDelta: 0.001 },
-                opacity: { duration: 0.5 },
-                filter: { duration: 0.5 }
-            }}
+            style={{ opacity, scale, y }}
             className="relative z-10"
         >
             <h2 
