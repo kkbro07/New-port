@@ -242,6 +242,32 @@ export function SortingVisualizer() {
         }
     }, [isSorted, isSorting, numberOfBars]);
 
+    const statusText = useMemo(() => {
+        if (currentStep < 0 || currentStep >= animations.length) return null;
+    
+        const step = animations[currentStep];
+        let description = "";
+        
+        switch (step.type) {
+          case 'compare':
+            description = `Comparing values at indices ${step.indices[0]} and ${step.indices[1]}`;
+            break;
+          case 'swap':
+            description = `Swapping values at indices ${step.indices[0]} and ${step.indices[1]}`;
+            break;
+          case 'sorted':
+            description = `Element at index ${step.indices[0]} is sorted`;
+            break;
+          default:
+            description = 'Sorting...'
+        }
+    
+        return {
+          step: `Step ${currentStep + 1} of ${animations.length}`,
+          description,
+        };
+      }, [currentStep, animations]);
+
     const isBusy = isSorting;
     const barWidth = useMemo(() => Math.max(800 / numberOfBars, 2), [numberOfBars]);
 
@@ -325,26 +351,34 @@ export function SortingVisualizer() {
               </div>
             </Card>
 
-            <Card className="w-full max-w-5xl h-[600px] p-4 flex items-end justify-center gap-1 overflow-hidden">
-                {displayArray.map((value, idx) => (
-                    <div
-                        className="array-bar group relative rounded-t-sm transition-colors duration-150"
-                        key={idx}
-                        style={{
-                            backgroundColor: barColors[idx] || BAR_COLOR,
-                            height: `${value}px`,
-                            width: `${barWidth}px`,
-                        }}>
-                            {numberOfBars <= 50 && (
-                                <span className={cn(
-                                    "absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-medium text-muted-foreground",
-                                    barColors[idx] !== BAR_COLOR && "text-foreground font-bold"
-                                )}>
-                                    {value}
-                                </span>
-                            )}
+            <Card className="w-full max-w-5xl h-[600px] p-4 flex flex-col justify-between overflow-hidden">
+                <div className="flex-grow flex items-end justify-center gap-1">
+                    {displayArray.map((value, idx) => (
+                        <div
+                            className="array-bar group relative rounded-t-sm transition-colors duration-150"
+                            key={idx}
+                            style={{
+                                backgroundColor: barColors[idx] || BAR_COLOR,
+                                height: `${value}px`,
+                                width: `${barWidth}px`,
+                            }}>
+                                {numberOfBars <= 50 && (
+                                    <span className={cn(
+                                        "absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-medium text-muted-foreground",
+                                        barColors[idx] !== BAR_COLOR && "text-foreground font-bold"
+                                    )}>
+                                        {value}
+                                    </span>
+                                )}
+                        </div>
+                    ))}
+                </div>
+                {isSorting && statusText && (
+                    <div className="mt-4 pt-4 border-t text-center">
+                        <p className="text-sm text-muted-foreground">{statusText.step}</p>
+                        <p className="mt-1 font-medium text-foreground">{statusText.description}</p>
                     </div>
-                ))}
+                )}
             </Card>
 
             <Card className="w-full max-w-5xl p-2">
@@ -357,5 +391,6 @@ export function SortingVisualizer() {
             </Card>
         </div>
     );
+}
 
     
