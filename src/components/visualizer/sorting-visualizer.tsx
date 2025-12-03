@@ -108,7 +108,7 @@ export function SortingVisualizer() {
     const resetArray = useCallback(() => {
         const newArray: number[] = [];
         for (let i = 0; i < numberOfBars; i++) {
-            newArray.push(Math.floor(Math.random() * (600 - 5 + 1)) + 5);
+            newArray.push(Math.floor(Math.random() * (500 - 5 + 1)) + 5);
         }
         dispatch({ type: 'RESET' });
         dispatch({ type: 'SET_ARRAY', payload: newArray });
@@ -189,9 +189,15 @@ export function SortingVisualizer() {
               break;
           case 'swap':
               if(arrayBars[barOneIdx as number]) {
-                const barStyle = arrayBars[barOneIdx as number].style;
-                barStyle.height = `${barTwoVal}px`;
-                barStyle.backgroundColor = SWAPPING_COLOR;
+                const bar = arrayBars[barOneIdx as number];
+                bar.style.height = `${barTwoVal}px`;
+                bar.style.backgroundColor = SWAPPING_COLOR;
+                if (bar.firstChild && bar.firstChild.nodeType === Node.ELEMENT_NODE) {
+                    const span = bar.firstChild as HTMLElement;
+                    if(span.tagName === 'SPAN') {
+                        span.innerText = barTwoVal.toString();
+                    }
+                }
               }
               break;
           case 'sorted':
@@ -284,16 +290,21 @@ export function SortingVisualizer() {
               </div>
             </Card>
 
-            <Card ref={containerRef} className="w-full max-w-5xl h-[650px] p-4 flex items-end justify-center gap-0.5 overflow-hidden">
+            <Card ref={containerRef} className="w-full max-w-5xl h-[600px] p-4 flex items-end justify-center gap-1 overflow-hidden">
                 {array.map((value, idx) => (
                     <div
-                        className="array-bar rounded-t-sm transition-all duration-150"
+                        className="array-bar relative rounded-t-sm transition-all duration-150"
                         key={idx}
                         style={{
                             backgroundColor: BAR_COLOR,
                             height: `${value}px`,
-                            width: `${Math.max(1000 / numberOfBars, 2)}px`,
+                            width: `${Math.max(800 / numberOfBars, 2)}px`,
                         }}>
+                            {numberOfBars <= 50 && (
+                                <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-medium">
+                                    {value}
+                                </span>
+                            )}
                     </div>
                 ))}
             </Card>
@@ -308,6 +319,5 @@ export function SortingVisualizer() {
             </Card>
         </div>
     );
-}
 
     
