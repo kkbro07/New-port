@@ -119,10 +119,10 @@ export default function Home() {
         )}
       </div>
       <AboutSection>
+        <ExperienceSection />
         <SkillsSection />
       </AboutSection>
       <ResumeSection />
-      <ExperienceSection />
       <section className="py-16 sm:py-24 text-center">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
