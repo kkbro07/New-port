@@ -18,7 +18,7 @@ const SORTED_COLOR = 'hsl(var(--chart-1))';
 
 // --- State Management ---
 type AnimationStep = {
-  type: 'compare' | 'swap' | 'sorted';
+  type: 'compare' | 'swap' | 'sorted' | 'overwrite';
   indices: number[];
   values?: number[];
 };
@@ -128,6 +128,208 @@ const getBubbleSortAnimations = (array: number[]): AnimationStep[] => {
     return animations;
 };
 
+const getSelectionSortAnimations = (array: number[]): AnimationStep[] => {
+    const animations: AnimationStep[] = [];
+    const n = array.length;
+    for (let i = 0; i < n - 1; i++) {
+        let minIdx = i;
+        for (let j = i + 1; j < n; j++) {
+            animations.push({ type: 'compare', indices: [minIdx, j] });
+            if (array[j] < array[minIdx]) {
+                minIdx = j;
+            }
+        }
+        animations.push({ type: 'swap', indices: [i, minIdx], values: [array[minIdx], array[i]] });
+        [array[i], array[minIdx]] = [array[minIdx], array[i]];
+        animations.push({ type: 'sorted', indices: [i] });
+    }
+    animations.push({ type: 'sorted', indices: [n-1] });
+    return animations;
+};
+
+const getInsertionSortAnimations = (array: number[]): AnimationStep[] => {
+    const animations: AnimationStep[] = [];
+    const n = array.length;
+    for (let i = 1; i < n; i++) {
+        let key = array[i];
+        let j = i - 1;
+        animations.push({ type: 'compare', indices: [i, j] });
+        while (j >= 0 && array[j] > key) {
+            animations.push({ type: 'overwrite', indices: [j+1], values: [array[j]] });
+            array[j + 1] = array[j];
+            j = j - 1;
+            if (j >= 0) animations.push({ type: 'compare', indices: [i, j] });
+        }
+        animations.push({ type: 'overwrite', indices: [j+1], values: [key] });
+        array[j + 1] = key;
+    }
+    for (let i=0; i<n; i++) animations.push({ type: 'sorted', indices: [i] });
+    return animations;
+};
+
+const getMergeSortAnimations = (array: number[]): AnimationStep[] => {
+    const animations: AnimationStep[] = [];
+    if (array.length <= 1) return animations;
+    const auxiliaryArray = array.slice();
+    mergeSortHelper(array, 0, array.length - 1, auxiliaryArray, animations);
+    return animations;
+};
+
+function mergeSortHelper(mainArray: number[], startIdx: number, endIdx: number, auxiliaryArray: number[], animations: AnimationStep[]) {
+    if (startIdx === endIdx) return;
+    const middleIdx = Math.floor((startIdx + endIdx) / 2);
+    mergeSortHelper(auxiliaryArray, startIdx, middleIdx, mainArray, animations);
+    mergeSortHelper(auxiliaryArray, middleIdx + 1, endIdx, mainArray, animations);
+    doMerge(mainArray, startIdx, middleIdx, endIdx, auxiliaryArray, animations);
+}
+
+function doMerge(mainArray: number[], startIdx: number, middleIdx: number, endIdx: number, auxiliaryArray: number[], animations: AnimationStep[]) {
+    let k = startIdx;
+    let i = startIdx;
+    let j = middleIdx + 1;
+    while (i <= middleIdx && j <= endIdx) {
+        animations.push({ type: 'compare', indices: [i, j] });
+        if (auxiliaryArray[i] <= auxiliaryArray[j]) {
+            animations.push({ type: 'overwrite', indices: [k], values: [auxiliaryArray[i]] });
+            mainArray[k++] = auxiliaryArray[i++];
+        } else {
+            animations.push({ type: 'overwrite', indices: [k], values: [auxiliaryArray[j]] });
+            mainArray[k++] = auxiliaryArray[j++];
+        }
+    }
+    while (i <= middleIdx) {
+        animations.push({ type: 'overwrite', indices: [k], values: [auxiliaryArray[i]] });
+        mainArray[k++] = auxiliaryArray[i++];
+    }
+    while (j <= endIdx) {
+        animations.push({ type: 'overwrite', indices: [k], values: [auxiliaryArray[j]] });
+        mainArray[k++] = auxiliaryArray[j++];
+    }
+}
+
+
+const getQuickSortAnimations = (array: number[]): AnimationStep[] => {
+    const animations: AnimationStep[] = [];
+    quickSortHelper(array, 0, array.length - 1, animations);
+    for(let i=0; i<array.length; i++) animations.push({ type: 'sorted', indices: [i] });
+    return animations;
+};
+
+function quickSortHelper(array: number[], low: number, high: number, animations: AnimationStep[]) {
+    if (low < high) {
+        const pi = partition(array, low, high, animations);
+        quickSortHelper(array, low, pi - 1, animations);
+        quickSortHelper(array, pi + 1, high, animations);
+    }
+}
+
+function partition(array: number[], low: number, high: number, animations: AnimationStep[]) {
+    const pivot = array[high];
+    let i = low - 1;
+    for (let j = low; j < high; j++) {
+        animations.push({ type: 'compare', indices: [j, high] });
+        if (array[j] < pivot) {
+            i++;
+            animations.push({ type: 'swap', indices: [i, j], values: [array[j], array[i]] });
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+    animations.push({ type: 'swap', indices: [i + 1, high], values: [array[high], array[i + 1]] });
+    [array[i + 1], array[high]] = [array[high], array[i + 1]];
+    return i + 1;
+}
+
+const getHeapSortAnimations = (array: number[]): AnimationStep[] => {
+    const animations: AnimationStep[] = [];
+    const n = array.length;
+    for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+        heapify(array, n, i, animations);
+    }
+    for (let i = n - 1; i > 0; i--) {
+        animations.push({ type: 'swap', indices: [0, i], values: [array[i], array[0]] });
+        [array[0], array[i]] = [array[i], array[0]];
+        animations.push({ type: 'sorted', indices: [i] });
+        heapify(array, i, 0, animations);
+    }
+    animations.push({ type: 'sorted', indices: [0] });
+    return animations;
+};
+
+function heapify(array: number[], n: number, i: number, animations: AnimationStep[]) {
+    let largest = i;
+    const left = 2 * i + 1;
+    const right = 2 * i + 2;
+    if (left < n) animations.push({ type: 'compare', indices: [largest, left] });
+    if (left < n && array[left] > array[largest]) {
+        largest = left;
+    }
+    if (right < n) animations.push({ type: 'compare', indices: [largest, right] });
+    if (right < n && array[right] > array[largest]) {
+        largest = right;
+    }
+    if (largest !== i) {
+        animations.push({ type: 'swap', indices: [i, largest], values: [array[largest], array[i]] });
+        [array[i], array[largest]] = [array[largest], array[i]];
+        heapify(array, n, largest, animations);
+    }
+}
+
+const getCocktailSortAnimations = (array: number[]): AnimationStep[] => {
+    const animations: AnimationStep[] = [];
+    let swapped = true;
+    let start = 0;
+    let end = array.length;
+
+    while (swapped) {
+        swapped = false;
+        for (let i = start; i < end - 1; ++i) {
+            animations.push({ type: 'compare', indices: [i, i + 1] });
+            if (array[i] > array[i + 1]) {
+                animations.push({ type: 'swap', indices: [i, i+1], values: [array[i+1], array[i]] });
+                [array[i], array[i + 1]] = [array[i + 1], array[i]];
+                swapped = true;
+            }
+        }
+        if (!swapped) break;
+        swapped = false;
+        animations.push({ type: 'sorted', indices: [end-1]});
+        end = end - 1;
+        for (let i = end - 1; i >= start; i--) {
+            animations.push({ type: 'compare', indices: [i, i + 1] });
+            if (array[i] > array[i + 1]) {
+                animations.push({ type: 'swap', indices: [i, i+1], values: [array[i+1], array[i]] });
+                [array[i], array[i + 1]] = [array[i + 1], array[i]];
+                swapped = true;
+            }
+        }
+        animations.push({ type: 'sorted', indices: [start]});
+        start = start + 1;
+    }
+    for(let i=start; i<end; i++) animations.push({ type: 'sorted', indices: [i] });
+    return animations;
+};
+
+const getShellSortAnimations = (array: number[]): AnimationStep[] => {
+    const animations: AnimationStep[] = [];
+    const n = array.length;
+    for (let gap = Math.floor(n / 2); gap > 0; gap = Math.floor(gap / 2)) {
+        for (let i = gap; i < n; i += 1) {
+            const temp = array[i];
+            let j;
+            animations.push({ type: 'compare', indices: [i, i-gap] });
+            for (j = i; j >= gap && array[j - gap] > temp; j -= gap) {
+                animations.push({ type: 'compare', indices: [j, j-gap] });
+                animations.push({ type: 'overwrite', indices: [j], values: [array[j - gap]] });
+                array[j] = array[j - gap];
+            }
+            animations.push({ type: 'overwrite', indices: [j], values: [temp] });
+            array[j] = temp;
+        }
+    }
+    for(let i=0; i<n; i++) animations.push({ type: 'sorted', indices: [i] });
+    return animations;
+};
+
 // --- Main Component ---
 export function SortingVisualizer() {
     const isMobile = useIsMobile();
@@ -163,7 +365,29 @@ export function SortingVisualizer() {
             case 'bubbleSort':
                 anims = getBubbleSortAnimations(originalArray);
                 break;
+            case 'selectionSort':
+                anims = getSelectionSortAnimations(originalArray);
+                break;
+            case 'insertionSort':
+                anims = getInsertionSortAnimations(originalArray);
+                break;
+            case 'mergeSort':
+                anims = getMergeSortAnimations(originalArray);
+                break;
+            case 'quickSort':
+                anims = getQuickSortAnimations(originalArray);
+                break;
+            case 'heapSort':
+                anims = getHeapSortAnimations(originalArray);
+                break;
+            case 'cocktailSort':
+                anims = getCocktailSortAnimations(originalArray);
+                break;
+            case 'shellSort':
+                anims = getShellSortAnimations(originalArray);
+                break;
             default:
+                anims = getBubbleSortAnimations(originalArray);
                 break;
         }
         dispatch({ type: 'START_SORT', payload: { array: originalArray, animations: anims } });
@@ -185,19 +409,17 @@ export function SortingVisualizer() {
         const timeout = setTimeout(() => {
             const animationStep = animations[currentStep];
             
-            // Create a temporary array to apply swaps to
             const newDisplayArray = [...displayArray];
-            if (animationStep.type === 'swap') {
-                const [index1, index2] = animationStep.indices;
-                const [val1, val2] = animationStep.values!;
-                newDisplayArray[index1] = val1;
-                newDisplayArray[index2] = val2;
-                setDisplayArray(newDisplayArray);
+            if (animationStep.type === 'swap' || animationStep.type === 'overwrite') {
+                if(animationStep.values) {
+                    animationStep.indices.forEach((index, i) => {
+                        newDisplayArray[index] = animationStep.values![i];
+                    });
+                    setDisplayArray(newDisplayArray);
+                }
             }
 
-            // Determine colors based on the current step
             const newBarColors = new Array(numberOfBars).fill(BAR_COLOR);
-            // Color sorted elements first
             for(let i = 0; i < animations.length && i <= currentStep; i++) {
                 if (animations[i].type === 'sorted') {
                     animations[i].indices.forEach(idx => {
@@ -206,7 +428,6 @@ export function SortingVisualizer() {
                 }
             }
 
-            // Then apply active step colors
             if (animationStep) {
               switch (animationStep.type) {
                 case 'compare':
@@ -215,6 +436,7 @@ export function SortingVisualizer() {
                   });
                   break;
                 case 'swap':
+                case 'overwrite':
                   animationStep.indices.forEach(i => {
                     if (newBarColors[i] !== SORTED_COLOR) newBarColors[i] = SWAPPING_COLOR;
                   });
@@ -243,7 +465,7 @@ export function SortingVisualizer() {
     }, [isSorted, isSorting, numberOfBars]);
 
     const statusText = useMemo(() => {
-        if (currentStep < 0 || currentStep >= animations.length) return null;
+        if (!isSorting || currentStep < 0 || currentStep >= animations.length) return null;
     
         const step = animations[currentStep];
         let description = "";
@@ -254,6 +476,9 @@ export function SortingVisualizer() {
             break;
           case 'swap':
             description = `Swapping values at indices ${step.indices[0]} and ${step.indices[1]}`;
+            break;
+          case 'overwrite':
+            description = `Overwriting index ${step.indices[0]} with value ${step.values ? step.values[0] : ''}`;
             break;
           case 'sorted':
             description = `Element at index ${step.indices[0]} is sorted`;
@@ -266,7 +491,7 @@ export function SortingVisualizer() {
           step: `Step ${currentStep + 1} of ${animations.length}`,
           description,
         };
-      }, [currentStep, animations]);
+      }, [currentStep, animations, isSorting]);
 
     const isBusy = isSorting;
     const barWidth = useMemo(() => Math.max(800 / numberOfBars, 2), [numberOfBars]);
@@ -288,14 +513,19 @@ export function SortingVisualizer() {
                               <SelectGroup>
                                 <SelectLabel>Basic Sorts</SelectLabel>
                                 <SelectItem value="bubbleSort">Bubble Sort</SelectItem>
-                                <SelectItem value="selection" disabled>Selection Sort</SelectItem>
-                                <SelectItem value="insertion" disabled>Insertion Sort</SelectItem>
+                                <SelectItem value="selectionSort">Selection Sort</SelectItem>
+                                <SelectItem value="insertionSort">Insertion Sort</SelectItem>
                               </SelectGroup>
                                <SelectGroup>
                                 <SelectLabel>Efficient Sorts</SelectLabel>
-                                <SelectItem value="mergeSort" disabled>Merge Sort</SelectItem>
-                                <SelectItem value="quickSort" disabled>Quick Sort</SelectItem>
-                                <SelectItem value="heapSort" disabled>Heap Sort</SelectItem>
+                                <SelectItem value="mergeSort">Merge Sort</SelectItem>
+                                <SelectItem value="quickSort">Quick Sort</SelectItem>
+                                <SelectItem value="heapSort">Heap Sort</SelectItem>
+                              </SelectGroup>
+                               <SelectGroup>
+                                <SelectLabel>Other Sorts</SelectLabel>
+                                <SelectItem value="cocktailSort">Cocktail Sort</SelectItem>
+                                <SelectItem value="shellSort">Shell Sort</SelectItem>
                               </SelectGroup>
                           </SelectContent>
                       </Select>
