@@ -1,9 +1,13 @@
 
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Download, Rocket, Code, Calendar } from "lucide-react";
 import Link from "next/link";
 import { projects } from "@/lib/projects-data";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 
 export function ResumeSection() {
 
@@ -25,9 +29,22 @@ export function ResumeSection() {
         }
     ];
 
+    const sectionRef = useRef<HTMLDivElement>(null);
+    const { scrollYProgress } = useScroll({
+      target: sectionRef,
+      offset: ["start end", "end center"]
+    });
+
+    const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
+    const y = useTransform(scrollYProgress, [0, 1], [100, 0]);
+
 
   return (
-    <section className="py-16 sm:py-24 bg-secondary/50">
+    <motion.section 
+      ref={sectionRef}
+      style={{ opacity, y }}
+      className="py-16 sm:py-24 bg-secondary/50"
+    >
       <div className="container mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center">
         <h2 className="font-headline text-3xl sm:text-4xl font-bold tracking-tighter">
           Interested in working together?
@@ -59,6 +76,6 @@ export function ResumeSection() {
             </Button>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }
