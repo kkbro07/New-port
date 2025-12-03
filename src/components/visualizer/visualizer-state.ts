@@ -19,6 +19,7 @@ export type Action =
   | { type: 'PAUSE_RESUME' }
   | { type: 'STEP_FORWARD' }
   | { type: 'STEP_BACKWARD' }
+  | { type: 'AUTO_STEP_FORWARD' }
   | { type: 'RESET'; payload: { array: number[], numberOfBars: number } }
   | { type: 'SORT_COMPLETE' };
 
@@ -62,6 +63,12 @@ export function reducer(state: State, action: Action): State {
     case 'STEP_BACKWARD':
         if (state.currentStep <= 0) return { ...state, currentStep: -1, isPaused: true };
         return { ...state, currentStep: state.currentStep - 1, isPaused: true };
+    case 'AUTO_STEP_FORWARD':
+      if (state.isPaused || !state.isSorting) return state;
+      if (state.currentStep >= state.animations.length - 1) {
+        return { ...state, isSorting: false, isPaused: true, isSorted: true };
+      }
+      return { ...state, currentStep: state.currentStep + 1 };
     case 'RESET':
       return {
         ...initialStateFactory(action.payload.numberOfBars),

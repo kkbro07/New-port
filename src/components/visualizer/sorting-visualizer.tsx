@@ -159,7 +159,7 @@ export function SortingVisualizer({ state, dispatch }: SortingVisualizerProps) {
         }
 
         const timeout = setTimeout(() => {
-            dispatch({ type: 'STEP_FORWARD' });
+            dispatch({ type: 'AUTO_STEP_FORWARD' });
         }, animationSpeed);
 
         return () => clearTimeout(timeout);
