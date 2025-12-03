@@ -25,6 +25,7 @@ import { ExperienceSection } from "@/components/home/experience-section";
 import { SkillsSection } from "@/components/home/skills-section";
 import { FaqSection } from "@/components/home/faq-section";
 import { FeaturedProjectCard } from "@/components/home/featured-project-card";
+import { ResumeSection } from "@/components/home/resume-section";
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
@@ -95,6 +96,7 @@ export default function Home() {
       </div>
       <AboutSection />
       <SkillsSection />
+      <ResumeSection />
       <ExperienceSection />
       <section className="py-16 sm:py-24 text-center">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
