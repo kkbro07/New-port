@@ -190,17 +190,33 @@ export function AlgorithmInsights({ algorithm }: { algorithm: string }) {
                 </CardContent>
             </Card>
 
-            <Card className="prose prose-zinc dark:prose-invert max-w-none bg-secondary/30 p-6">
-                <h2>Master Sorting Algorithms with Interactive Visualizations</h2>
-                <p>Our algorithm visualization tool helps you understand how sorting algorithms work through animated demonstrations. Whether you're a computer science student, preparing for technical interviews, or a developer looking to deepen your understanding of algorithms, this tool makes learning intuitive and engaging.</p>
-                <h3>Why Use Algorithm Visualizations?</h3>
-                <ul>
-                    <li><strong>Visual Learning:</strong> See exactly how elements move and compare during sorting</li>
-                    <li><strong>Step-by-Step Control:</strong> Pause, play, and step through each operation</li>
-                    <li><strong>Performance Comparison:</strong> Understand why some algorithms are faster than others</li>
-                    <li><strong>Custom Testing:</strong> Try your own data sets to see how algorithms perform</li>
-                </ul>
+            <Card className="bg-secondary/30 p-6">
+                <CardHeader className="p-0 mb-4">
+                    <CardTitle className="font-headline text-2xl tracking-tight">Master Sorting Algorithms Visually</CardTitle>
+                </CardHeader>
+                <CardContent className="p-0 text-muted-foreground">
+                    <p className="mb-6">Our tool helps you understand how sorting algorithms work through animated demonstrations. Whether you're a student, preparing for interviews, or a developer, this tool makes learning intuitive.</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <h4 className="font-semibold text-foreground mb-2">Visual Learning</h4>
+                            <p className="text-sm">See exactly how elements move and compare during the sorting process.</p>
+                        </div>
+                        <div>
+                            <h4 className="font-semibold text-foreground mb-2">Step-by-Step Control</h4>
+                            <p className="text-sm">Pause, play, and step through each operation to understand the logic.</p>
+                        </div>
+                        <div>
+                            <h4 className="font-semibold text-foreground mb-2">Performance Comparison</h4>
+                            <p className="text-sm">Understand why some algorithms are faster or more memory-efficient.</p>
+                        </div>
+                        <div>
+                            <h4 className="font-semibold text-foreground mb-2">Custom Testing</h4>
+                            <p className="text-sm">Try your own datasets to see how algorithms perform in different scenarios.</p>
+                        </div>
+                    </div>
+                </CardContent>
             </Card>
+
 
             <Card className="bg-secondary/30 p-8">
                 <h3 className="mb-6 text-xl font-bold">Frequently Asked Questions</h3>
