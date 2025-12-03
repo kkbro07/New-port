@@ -5,7 +5,7 @@ import React, { useState, useEffect, useReducer, useCallback, useMemo, useRef } 
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup, SelectLabel } from '@/components/ui/select';
-import { Play, Pause, RotateCcw, ChevronsDownUp } from 'lucide-react';
+import { Play, Pause, RotateCcw, ChevronsDownUp, SkipBack, SkipForward } from 'lucide-react';
 import { Card } from '../ui/card';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -47,6 +47,7 @@ type Action =
   | { type: 'START_SORT'; payload: { array: number[], animations: AnimationStep[] } }
   | { type: 'PAUSE_RESUME' }
   | { type: 'STEP_FORWARD' }
+  | { type: 'STEP_BACKWARD' }
   | { type: 'RESET'; payload: { array: number[], numberOfBars: number } }
   | { type: 'SORT_COMPLETE' };
 
@@ -85,7 +86,7 @@ function reducer(state: State, action: Action): State {
         ...state,
         array: action.payload.array,
         animations: action.payload.animations,
-        currentStep: 0,
+        currentStep: -1, // Start at -1 so first step is 0
         isSorting: true,
         isPaused: false,
         isSorted: false,
@@ -93,10 +94,13 @@ function reducer(state: State, action: Action): State {
     case 'PAUSE_RESUME':
       return { ...state, isPaused: !state.isPaused };
     case 'STEP_FORWARD':
-        if(state.currentStep >= state.animations.length) {
+        if(state.currentStep >= state.animations.length - 1) {
             return { ...state, isSorting: false, isPaused: false, isSorted: true };
         }
-      return { ...state, currentStep: state.currentStep + 1 };
+      return { ...state, currentStep: state.currentStep + 1, isPaused: true };
+    case 'STEP_BACKWARD':
+        if (state.currentStep <= -1) return state;
+        return { ...state, currentStep: state.currentStep - 1, isPaused: true };
     case 'RESET':
       return {
         ...initialStateFactory(action.payload.numberOfBars),
@@ -137,17 +141,18 @@ const getBubbleSortAnimations = (array: number[]): AnimationStep[] => {
 
 const getSelectionSortAnimations = (array: number[]): AnimationStep[] => {
     const animations: AnimationStep[] = [];
-    const n = array.length;
+    const arr = array.slice();
+    const n = arr.length;
     for (let i = 0; i < n - 1; i++) {
         let minIdx = i;
         for (let j = i + 1; j < n; j++) {
             animations.push({ type: 'compare', indices: [minIdx, j] });
-            if (array[j] < array[minIdx]) {
+            if (arr[j] < arr[minIdx]) {
                 minIdx = j;
             }
         }
-        animations.push({ type: 'swap', indices: [i, minIdx], values: [array[minIdx], array[i]] });
-        [array[i], array[minIdx]] = [array[minIdx], array[i]];
+        animations.push({ type: 'swap', indices: [i, minIdx], values: [arr[minIdx], arr[i]] });
+        [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];
         animations.push({ type: 'sorted', indices: [i] });
     }
     animations.push({ type: 'sorted', indices: [n-1] });
@@ -156,19 +161,20 @@ const getSelectionSortAnimations = (array: number[]): AnimationStep[] => {
 
 const getInsertionSortAnimations = (array: number[]): AnimationStep[] => {
     const animations: AnimationStep[] = [];
-    const n = array.length;
+    const arr = array.slice();
+    const n = arr.length;
     for (let i = 1; i < n; i++) {
-        let key = array[i];
+        let key = arr[i];
         let j = i - 1;
         animations.push({ type: 'compare', indices: [i, j] });
-        while (j >= 0 && array[j] > key) {
-            animations.push({ type: 'overwrite', indices: [j+1], values: [array[j]] });
-            array[j + 1] = array[j];
+        while (j >= 0 && arr[j] > key) {
+            animations.push({ type: 'overwrite', indices: [j+1], values: [arr[j]] });
+            arr[j + 1] = arr[j];
             j = j - 1;
             if (j >= 0) animations.push({ type: 'compare', indices: [i, j] });
         }
         animations.push({ type: 'overwrite', indices: [j+1], values: [key] });
-        array[j + 1] = key;
+        arr[j + 1] = key;
     }
     for (let i=0; i<n; i++) animations.push({ type: 'sorted', indices: [i] });
     return animations;
@@ -218,8 +224,9 @@ function doMerge(mainArray: number[], startIdx: number, middleIdx: number, endId
 
 const getQuickSortAnimations = (array: number[]): AnimationStep[] => {
     const animations: AnimationStep[] = [];
-    quickSortHelper(array, 0, array.length - 1, animations);
-    for(let i=0; i<array.length; i++) animations.push({ type: 'sorted', indices: [i] });
+    const arr = array.slice();
+    quickSortHelper(arr, 0, arr.length - 1, animations);
+    for(let i=0; i<arr.length; i++) animations.push({ type: 'sorted', indices: [i] });
     return animations;
 };
 
@@ -228,7 +235,7 @@ function quickSortHelper(array: number[], low: number, high: number, animations:
         const pi = partition(array, low, high, animations);
         quickSortHelper(array, low, pi - 1, animations);
         quickSortHelper(array, pi + 1, high, animations);
-    } else if (low === high) {
+    } else if (low >= high && low < array.length) {
         animations.push({ type: 'sorted', indices: [low] });
     }
 }
@@ -252,15 +259,16 @@ function partition(array: number[], low: number, high: number, animations: Anima
 
 const getHeapSortAnimations = (array: number[]): AnimationStep[] => {
     const animations: AnimationStep[] = [];
-    const n = array.length;
+    const arr = array.slice();
+    const n = arr.length;
     for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
-        heapify(array, n, i, animations);
+        heapify(arr, n, i, animations);
     }
     for (let i = n - 1; i > 0; i--) {
-        animations.push({ type: 'swap', indices: [0, i], values: [array[i], array[0]] });
-        [array[0], array[i]] = [array[i], array[0]];
+        animations.push({ type: 'swap', indices: [0, i], values: [arr[i], arr[0]] });
+        [arr[0], arr[i]] = [arr[i], arr[0]];
         animations.push({ type: 'sorted', indices: [i] });
-        heapify(array, i, 0, animations);
+        heapify(arr, i, 0, animations);
     }
     animations.push({ type: 'sorted', indices: [0] });
     return animations;
@@ -287,17 +295,18 @@ function heapify(array: number[], n: number, i: number, animations: AnimationSte
 
 const getCocktailSortAnimations = (array: number[]): AnimationStep[] => {
     const animations: AnimationStep[] = [];
+    const arr = array.slice();
     let swapped = true;
     let start = 0;
-    let end = array.length;
+    let end = arr.length;
 
     while (swapped) {
         swapped = false;
         for (let i = start; i < end - 1; ++i) {
             animations.push({ type: 'compare', indices: [i, i + 1] });
-            if (array[i] > array[i + 1]) {
-                animations.push({ type: 'swap', indices: [i, i+1], values: [array[i+1], array[i]] });
-                [array[i], array[i + 1]] = [array[i + 1], array[i]];
+            if (arr[i] > arr[i + 1]) {
+                animations.push({ type: 'swap', indices: [i, i+1], values: [arr[i+1], arr[i]] });
+                [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
                 swapped = true;
             }
         }
@@ -307,9 +316,9 @@ const getCocktailSortAnimations = (array: number[]): AnimationStep[] => {
         end = end - 1;
         for (let i = end - 1; i >= start; i--) {
             animations.push({ type: 'compare', indices: [i, i + 1] });
-            if (array[i] > array[i + 1]) {
-                animations.push({ type: 'swap', indices: [i, i+1], values: [array[i+1], array[i]] });
-                [array[i], array[i + 1]] = [array[i + 1], array[i]];
+            if (arr[i] > arr[i + 1]) {
+                animations.push({ type: 'swap', indices: [i, i+1], values: [arr[i+1], arr[i]] });
+                [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
                 swapped = true;
             }
         }
@@ -322,19 +331,20 @@ const getCocktailSortAnimations = (array: number[]): AnimationStep[] => {
 
 const getShellSortAnimations = (array: number[]): AnimationStep[] => {
     const animations: AnimationStep[] = [];
-    const n = array.length;
+    const arr = array.slice();
+    const n = arr.length;
     for (let gap = Math.floor(n / 2); gap > 0; gap = Math.floor(gap / 2)) {
         for (let i = gap; i < n; i += 1) {
-            const temp = array[i];
+            const temp = arr[i];
             let j;
             animations.push({ type: 'compare', indices: [i, i-gap] });
-            for (j = i; j >= gap && array[j - gap] > temp; j -= gap) {
+            for (j = i; j >= gap && arr[j - gap] > temp; j -= gap) {
                 animations.push({ type: 'compare', indices: [j, j-gap] });
-                animations.push({ type: 'overwrite', indices: [j], values: [array[j - gap]] });
-                array[j] = array[j - gap];
+                animations.push({ type: 'overwrite', indices: [j], values: [arr[j - gap]] });
+                arr[j] = arr[j - gap];
             }
             animations.push({ type: 'overwrite', indices: [j], values: [temp] });
-            array[j] = temp;
+            arr[j] = temp;
         }
     }
     for(let i=0; i<n; i++) animations.push({ type: 'sorted', indices: [i] });
@@ -363,13 +373,8 @@ export function SortingVisualizer() {
     }, []);
 
     useEffect(() => {
-        setDisplayArray(array);
-    }, [array]);
-
-    useEffect(() => {
         generateRandomArray(numberOfBars);
     }, []);
-
 
     const handleSort = () => {
         if (isSorting || isSorted) return;
@@ -410,6 +415,18 @@ export function SortingVisualizer() {
     const handleReset = () => {
         generateRandomArray(numberOfBars);
     }
+    
+    const handleStepForward = () => {
+        if (isSorting) {
+            dispatch({ type: 'STEP_FORWARD' });
+        }
+    };
+    
+    const handleStepBackward = () => {
+        if (isSorting) {
+            dispatch({ type: 'STEP_BACKWARD' });
+        }
+    };
 
     const handleSetCustomArray = () => {
         const numbers = customArrayInput.split(',').map(s => s.trim()).filter(Boolean).map(Number);
@@ -436,59 +453,71 @@ export function SortingVisualizer() {
 
     // Animation Effect
     useEffect(() => {
-        if (!isSorting || isPaused || currentStep >= animations.length) {
-            if (isSorting && currentStep >= animations.length) {
+        let tempArray = array.slice();
+        const colors = new Array(numberOfBars).fill(BAR_COLOR);
+
+        if (currentStep === -1) {
+            setDisplayArray(tempArray);
+            setBarColors(colors);
+            return;
+        }
+
+        for (let i = 0; i <= currentStep; i++) {
+            const step = animations[i];
+            if (step.type === 'swap') {
+                const [idx1, idx2] = step.indices;
+                [tempArray[idx1], tempArray[idx2]] = [tempArray[idx2], tempArray[idx1]];
+            } else if (step.type === 'overwrite') {
+                const [idx] = step.indices;
+                tempArray[idx] = step.values![0];
+            }
+        }
+
+        for(let i = 0; i <= currentStep; i++) {
+            if (animations[i].type === 'sorted') {
+                animations[i].indices.forEach(idx => {
+                    if (idx < colors.length) colors[idx] = SORTED_COLOR;
+                });
+            }
+        }
+        
+        const finalStep = animations[currentStep];
+        if (finalStep) {
+            switch (finalStep.type) {
+                case 'compare':
+                    finalStep.indices.forEach(i => {
+                        if (colors[i] !== SORTED_COLOR) colors[i] = COMPARING_COLOR;
+                    });
+                    break;
+                case 'swap':
+                case 'overwrite':
+                    finalStep.indices.forEach(i => {
+                        if (colors[i] !== SORTED_COLOR) colors[i] = SWAPPING_COLOR;
+                    });
+                    break;
+            }
+        }
+        
+        setDisplayArray(tempArray);
+        setBarColors(colors);
+
+    }, [currentStep, array, animations, numberOfBars]);
+
+
+    useEffect(() => {
+        if (!isSorting || isPaused || currentStep >= animations.length -1) {
+            if (isSorting && !isPaused && currentStep >= animations.length -1) {
                 dispatch({ type: 'SORT_COMPLETE' });
             }
             return;
         };
 
         const timeout = setTimeout(() => {
-            const animationStep = animations[currentStep];
-            
-            const newDisplayArray = [...displayArray];
-            if (animationStep.type === 'swap' || animationStep.type === 'overwrite') {
-                if(animationStep.values) {
-                    animationStep.indices.forEach((index, i) => {
-                        newDisplayArray[index] = animationStep.values![i];
-                    });
-                    setDisplayArray(newDisplayArray);
-                }
-            }
-
-            const newBarColors = new Array(numberOfBars).fill(BAR_COLOR);
-            for(let i = 0; i < animations.length && i <= currentStep; i++) {
-                if (animations[i].type === 'sorted') {
-                    animations[i].indices.forEach(idx => {
-                        if (idx < newBarColors.length) newBarColors[idx] = SORTED_COLOR;
-                    });
-                }
-            }
-
-            if (animationStep) {
-              switch (animationStep.type) {
-                case 'compare':
-                  animationStep.indices.forEach(i => {
-                    if (newBarColors[i] !== SORTED_COLOR) newBarColors[i] = COMPARING_COLOR;
-                  });
-                  break;
-                case 'swap':
-                case 'overwrite':
-                  animationStep.indices.forEach(i => {
-                    if (newBarColors[i] !== SORTED_COLOR) newBarColors[i] = SWAPPING_COLOR;
-                  });
-                  break;
-              }
-            }
-            
-            setBarColors(newBarColors);
-
             dispatch({ type: 'STEP_FORWARD' });
-
         }, animationSpeed);
 
         return () => clearTimeout(timeout);
-    }, [currentStep, isSorting, isPaused, animations, displayArray, animationSpeed, numberOfBars]);
+    }, [currentStep, isSorting, isPaused, animations, animationSpeed]);
 
     // Final "sorted" flash effect
     useEffect(() => {
@@ -530,7 +559,7 @@ export function SortingVisualizer() {
         };
       }, [currentStep, animations, isSorting]);
 
-    const isBusy = isSorting;
+    const isBusy = isSorting && !isPaused;
     const barWidth = useMemo(() => Math.max(800 / numberOfBars, 2), [numberOfBars]);
 
     return (
@@ -579,6 +608,9 @@ export function SortingVisualizer() {
                         </div>
 
                         <div className="flex items-center gap-2">
+                             <Button variant="ghost" size="icon" onClick={handleStepBackward} disabled={isBusy || !isSorting || currentStep <= -1}>
+                                <SkipBack />
+                            </Button>
                             <Button
                                 variant="ghost"
                                 size="icon"
@@ -586,6 +618,9 @@ export function SortingVisualizer() {
                                 disabled={isSorted}
                             >
                                 {isSorting && !isPaused ? <Pause /> : <Play />}
+                            </Button>
+                             <Button variant="ghost" size="icon" onClick={handleStepForward} disabled={isBusy || !isSorting || currentStep >= animations.length - 1}>
+                                <SkipForward />
                             </Button>
                             <Button variant="ghost" size="icon" onClick={handleReset}>
                                 <RotateCcw />
@@ -679,6 +714,8 @@ export function SortingVisualizer() {
         </div>
     );
 }
+
+    
 
     
 
