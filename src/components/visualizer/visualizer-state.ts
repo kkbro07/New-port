@@ -49,17 +49,18 @@ export function reducer(state: State, action: Action): State {
         isSorted: false,
       };
     case 'PAUSE_RESUME':
+      // If we are starting to sort from scratch, and we hit play, we should not be paused.
+      if (state.currentStep === -1 && !state.isPaused) {
+        return { ...state, isPaused: false };
+      }
       return { ...state, isPaused: !state.isPaused };
     case 'STEP_FORWARD':
         if(state.currentStep >= state.animations.length - 1) {
-            return { ...state, isSorting: false, isPaused: false, isSorted: true };
+            return { ...state, isSorting: false, isPaused: true, isSorted: true };
         }
-      // When stepping forward, we should be paused to allow manual stepping.
-      // The auto-play useEffect will override this if it's running.
       return { ...state, currentStep: state.currentStep + 1, isPaused: true };
     case 'STEP_BACKWARD':
-        if (state.currentStep <= -1) return state;
-        // When stepping backward, we must be paused.
+        if (state.currentStep <= 0) return { ...state, currentStep: -1, isPaused: true };
         return { ...state, currentStep: state.currentStep - 1, isPaused: true };
     case 'RESET':
       return {
@@ -70,7 +71,7 @@ export function reducer(state: State, action: Action): State {
         algorithm: state.algorithm,
       };
     case 'SORT_COMPLETE':
-      return { ...state, isSorting: false, isPaused: false, isSorted: true };
+      return { ...state, isSorting: false, isPaused: true, isSorted: true };
     default:
       return state;
   }

@@ -5,7 +5,6 @@ import React, { useState, useEffect, useReducer, useCallback, useMemo } from 're
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useToast } from '@/hooks/use-toast';
 import { getAnimations } from '@/lib/algorithms';
-import type { AnimationStep } from '@/lib/algorithms';
 import { initialStateFactory, reducer } from './visualizer-state';
 import { VisualizerControls } from './visualizer-controls';
 import { VisualizerDisplay } from './visualizer-display';
@@ -17,7 +16,6 @@ export function SortingVisualizer() {
     const [state, dispatch] = useReducer(reducer, initialStateFactory(isMobile ? 15 : 15));
     const { array, animations, currentStep, isSorting, isPaused, isSorted, numberOfBars, animationSpeed, algorithm } = state;
     
-    // Derived state for the array being displayed, which changes during animations
     const [displayArray, setDisplayArray] = useState<number[]>([]);
     const [barColors, setBarColors] = useState<string[]>([]);
     const [customArrayInput, setCustomArrayInput] = useState('');
@@ -37,10 +35,16 @@ export function SortingVisualizer() {
     }, []);
 
     const handleSort = () => {
-        if (isSorting || isSorted) return;
-        const originalArray = array.slice();
-        const anims = getAnimations(algorithm, originalArray);
-        dispatch({ type: 'START_SORT', payload: { array: originalArray, animations: anims } });
+        if (isSorting && !isPaused) return; // Already playing
+        if (isSorted) return; // Already sorted
+    
+        if (!isSorting) { // Starting a new sort
+            const originalArray = array.slice();
+            const anims = getAnimations(algorithm, originalArray);
+            dispatch({ type: 'START_SORT', payload: { array: originalArray, animations: anims } });
+        } else { // Resuming a paused sort
+            dispatch({ type: 'PAUSE_RESUME' });
+        }
     };
 
     const handleReset = () => {
@@ -93,7 +97,6 @@ export function SortingVisualizer() {
             return;
         }
 
-        // Replay animations up to the current step to rebuild state
         for (let i = 0; i <= currentStep; i++) {
             const step = animations[i];
             if (step.type === 'swap') {
@@ -105,16 +108,14 @@ export function SortingVisualizer() {
             }
         }
         
-        // Color sorted elements
-        for(let i = 0; i <= currentStep; i++) {
-            if (animations[i].type === 'sorted') {
+        for(let i = 0; i < animations.length; i++) {
+            if (animations[i].type === 'sorted' && i <= currentStep) {
                 animations[i].indices.forEach(idx => {
                     if (idx < colors.length) colors[idx] = 'hsl(var(--chart-1))';
                 });
             }
         }
         
-        // Color elements from the current step
         const finalStep = animations[currentStep];
         if (finalStep) {
             switch (finalStep.type) {
@@ -140,27 +141,22 @@ export function SortingVisualizer() {
 
     // This effect handles the automatic playback of the animation.
     useEffect(() => {
-        // Conditions to stop the animation:
-        // - Not sorting
-        // - Is paused
-        // - Reached the end of the animation sequence
         if (!isSorting || isPaused || currentStep >= animations.length - 1) {
-            // If the animation reached the end while playing, mark it as complete.
             if (isSorting && !isPaused && currentStep >= animations.length - 1) {
                 dispatch({ type: 'SORT_COMPLETE' });
             }
-            return; // Stop the effect
+            return; 
         }
 
-        // Schedule the next step
         const timeout = setTimeout(() => {
-            dispatch({ type: 'STEP_FORWARD' });
+            // This is the auto-play step
+            dispatch({ type: 'STEP_FORWARD' }); 
+            // We immediately toggle pause off to allow continuous play
+            dispatch({ type: 'PAUSE_RESUME' });
         }, animationSpeed);
 
-        // Cleanup function to clear the timeout if the component unmounts
-        // or if the dependencies change before the timeout finishes.
         return () => clearTimeout(timeout);
-    }, [currentStep, isSorting, isPaused, animations, animationSpeed, dispatch]);
+    }, [currentStep, isSorting, isPaused, animations, animationSpeed]);
 
 
     // Final "sorted" flash effect
