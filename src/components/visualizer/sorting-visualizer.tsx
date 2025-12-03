@@ -132,7 +132,7 @@ export function SortingVisualizer() {
 
     useEffect(() => {
         generateRandomArray();
-    }, [numberOfbars]);
+    }, [numberOfBars]);
 
     const handleSort = () => {
         if (isSorted) return;
