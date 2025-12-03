@@ -37,20 +37,6 @@ export const initialStateFactory = (numberOfBars: number): State => ({
 export function reducer(state: State, action: Action): State {
   switch (action.type) {
     case 'SET_CONFIG':
-      if (action.payload.numberOfBars && action.payload.numberOfBars !== state.numberOfBars) {
-        // When number of bars changes, we need a full reset
-        const newArray = [];
-        for (let i = 0; i < action.payload.numberOfBars; i++) {
-            newArray.push(Math.floor(Math.random() * (500 - 20 + 1)) + 20);
-        }
-        return { 
-          ...initialStateFactory(action.payload.numberOfBars),
-          array: newArray,
-          numberOfBars: action.payload.numberOfBars,
-          animationSpeed: state.animationSpeed,
-          algorithm: state.algorithm,
-        };
-      }
       return { ...state, ...action.payload };
     case 'START_SORT':
       return {
@@ -68,9 +54,12 @@ export function reducer(state: State, action: Action): State {
         if(state.currentStep >= state.animations.length - 1) {
             return { ...state, isSorting: false, isPaused: false, isSorted: true };
         }
+      // When stepping forward, we should be paused to allow manual stepping.
+      // The auto-play useEffect will override this if it's running.
       return { ...state, currentStep: state.currentStep + 1, isPaused: true };
     case 'STEP_BACKWARD':
         if (state.currentStep <= -1) return state;
+        // When stepping backward, we must be paused.
         return { ...state, currentStep: state.currentStep - 1, isPaused: true };
     case 'RESET':
       return {

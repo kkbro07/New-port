@@ -14,7 +14,7 @@ import { VisualizerLegend } from './visualizer-legend';
 // --- Main Component ---
 export function SortingVisualizer() {
     const isMobile = useIsMobile();
-    const [state, dispatch] = useReducer(reducer, initialStateFactory(isMobile ? 10 : 15));
+    const [state, dispatch] = useReducer(reducer, initialStateFactory(isMobile ? 15 : 15));
     const { array, animations, currentStep, isSorting, isPaused, isSorted, numberOfBars, animationSpeed, algorithm } = state;
     
     // Derived state for the array being displayed, which changes during animations
@@ -93,6 +93,7 @@ export function SortingVisualizer() {
             return;
         }
 
+        // Replay animations up to the current step to rebuild state
         for (let i = 0; i <= currentStep; i++) {
             const step = animations[i];
             if (step.type === 'swap') {
@@ -103,7 +104,8 @@ export function SortingVisualizer() {
                 tempArray[idx] = step.values![0];
             }
         }
-
+        
+        // Color sorted elements
         for(let i = 0; i <= currentStep; i++) {
             if (animations[i].type === 'sorted') {
                 animations[i].indices.forEach(idx => {
@@ -112,6 +114,7 @@ export function SortingVisualizer() {
             }
         }
         
+        // Color elements from the current step
         const finalStep = animations[currentStep];
         if (finalStep) {
             switch (finalStep.type) {
@@ -135,20 +138,30 @@ export function SortingVisualizer() {
     }, [currentStep, array, animations, numberOfBars]);
 
 
+    // This effect handles the automatic playback of the animation.
     useEffect(() => {
-        if (!isSorting || isPaused || currentStep >= animations.length -1) {
-            if (isSorting && !isPaused && currentStep >= animations.length -1) {
+        // Conditions to stop the animation:
+        // - Not sorting
+        // - Is paused
+        // - Reached the end of the animation sequence
+        if (!isSorting || isPaused || currentStep >= animations.length - 1) {
+            // If the animation reached the end while playing, mark it as complete.
+            if (isSorting && !isPaused && currentStep >= animations.length - 1) {
                 dispatch({ type: 'SORT_COMPLETE' });
             }
-            return;
-        };
+            return; // Stop the effect
+        }
 
+        // Schedule the next step
         const timeout = setTimeout(() => {
             dispatch({ type: 'STEP_FORWARD' });
         }, animationSpeed);
 
+        // Cleanup function to clear the timeout if the component unmounts
+        // or if the dependencies change before the timeout finishes.
         return () => clearTimeout(timeout);
-    }, [currentStep, isSorting, isPaused, animations, animationSpeed]);
+    }, [currentStep, isSorting, isPaused, animations, animationSpeed, dispatch]);
+
 
     // Final "sorted" flash effect
     useEffect(() => {
