@@ -26,7 +26,7 @@ export function Ticker() {
                     <span className="text-3xl md:text-5xl font-headline font-bold uppercase text-foreground/10">
                         {item}
                     </span>
-                    <Star className="w-6 h-6 md:w-8 md:h-8 mx-4 text-foreground/10" fill="hsl(var(--foreground) / 0.1)" />
+                    <Star className="w-4 h-4 md:w-8 md:h-8 mx-4 text-foreground/10" fill="hsl(var(--foreground) / 0.1)" />
                 </div>
             ))}
             </div>
@@ -36,7 +36,7 @@ export function Ticker() {
                     <span className="text-3xl md:text-5xl font-headline font-bold uppercase text-foreground/10">
                         {item}
                     </span>
-                    <Star className="w-6 h-6 md:w-8 md:h-8 mx-4 text-foreground/10" fill="hsl(var(--foreground) / 0.1)" />
+                    <Star className="w-4 h-4 md:w-8 md:h-8 mx-4 text-foreground/10" fill="hsl(var(--foreground) / 0.1)" />
                 </div>
             ))}
             </div>

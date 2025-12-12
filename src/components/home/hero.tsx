@@ -47,11 +47,11 @@ export function Hero() {
       <Ticker />
 
       <div
-        className="container relative z-20 mx-auto grid h-dvh grid-cols-1 grid-rows-[auto_1fr_auto] gap-8 px-4 py-8 sm:px-6 lg:px-8"
+        className="container relative z-20 mx-auto grid h-dvh grid-cols-2 grid-rows-[auto_1fr_auto] gap-8 px-4 py-8 sm:px-6 lg:px-8"
       >
         
         <div 
-          className="col-start-1 row-start-1 self-start"
+          className="col-span-1 row-start-1 self-start"
         >
           <Link
             href="/"
@@ -63,15 +63,15 @@ export function Hero() {
         </div>
 
         <div 
-          className="col-start-1 row-start-1 self-start justify-self-end sm:col-start-2 sm:row-start-1 sm:justify-self-end sm:self-start"
+          className="col-start-2 row-start-1 self-start justify-self-end"
         >
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <ThemeToggle />
-            <span className="font-mono text-xs sm:text-sm text-muted-foreground text-right">
+            <span className="font-mono text-xs sm:text-sm text-muted-foreground text-right hidden sm:block">
               ■ Surat, Gujarat, India
             </span>
           </div>
-          <nav className="mt-2 sm:mt-4 flex flex-col items-end space-y-1 text-sm font-medium">
+          <nav className="mt-2 sm:mt-4 flex flex-col items-end space-y-1 text-xs sm:text-sm font-medium">
             {navItems.map((item) => (
               <Link
                 key={`${item.href}-${item.label}`}
@@ -87,7 +87,7 @@ export function Hero() {
           </nav>
         </div>
 
-        <div className="col-span-1 row-start-3 self-end md:col-span-1">
+        <div className="col-span-2 row-start-2 self-center sm:col-span-1 sm:row-start-3 sm:self-end">
           <h1 
             className="font-headline text-5xl font-bold uppercase leading-none tracking-tighter sm:text-6xl md:text-7xl"
           >
@@ -101,7 +101,7 @@ export function Hero() {
         </div>
 
         <div 
-          className="col-start-1 row-start-2 self-center sm:col-start-2 sm:row-start-3 sm:self-end sm:flex sm:items-end sm:justify-end sm:text-right"
+          className="col-span-2 row-start-3 self-end justify-self-start sm:col-start-2 sm:row-start-3 sm:justify-self-end sm:text-right"
         >
           <div className="max-w-sm">
             <p className="text-base text-muted-foreground">

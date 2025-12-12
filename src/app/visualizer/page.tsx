@@ -20,10 +20,10 @@ export default function VisualizerPage() {
           ]}
         />
       <header className="text-center mb-8">
-        <h1 className="font-headline text-4xl font-bold tracking-tighter sm:text-5xl">
+        <h1 className="font-headline text-3xl sm:text-4xl md:text-5xl font-bold tracking-tighter">
           Sorting Algorithm Visualizer
         </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
+        <p className="mx-auto mt-4 max-w-2xl text-base sm:text-lg text-muted-foreground">
           Watch sorting algorithms in action. An interactive tool to understand data structures and algorithms.
         </p>
       </header>

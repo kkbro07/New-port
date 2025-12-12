@@ -1,3 +1,4 @@
+
 import Image from "next/image";
 import type { Project } from "@/lib/projects-data";
 import type { ImagePlaceholder } from "@/lib/placeholder-images";
@@ -59,7 +60,7 @@ export function FeaturedProjectCard({ project, image, align = "left" }: Featured
             </div>
           )}
         </div>
-        <div className="flex flex-col p-6 md:p-8">
+        <div className="flex flex-col p-6 sm:p-8">
             <p className="mb-2 text-sm font-medium text-muted-foreground">
                 {project.category}
             </p>

@@ -45,13 +45,13 @@ export function VisualizerControls({
         <Card className="w-full max-w-5xl p-4">
             <Collapsible open={isCustomInputOpen} onOpenChange={setCustomInputOpen}>
                 <div className="flex flex-col sm:flex-row flex-wrap items-center justify-between gap-4">
-                    <div className="flex flex-wrap items-center justify-center gap-4">
+                    <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
                         <Select
                             onValueChange={(value) => dispatch({ type: 'SET_CONFIG', payload: { algorithm: value }})}
                             defaultValue={algorithm}
                             disabled={isBusy}
                         >
-                            <SelectTrigger className="w-[180px]">
+                            <SelectTrigger className="w-full sm:w-[180px]">
                                 <SelectValue placeholder="Select Algorithm" />
                             </SelectTrigger>
                             <SelectContent>
@@ -74,19 +74,21 @@ export function VisualizerControls({
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
-                        <Button onClick={onReset} disabled={isSorting}>
-                            Random Array
-                        </Button>
-                        <CollapsibleTrigger asChild>
-                            <Button variant="outline" disabled={isSorting}>
-                                <ChevronsDownUp className="mr-2 h-4 w-4" />
-                                Custom Array
+                        <div className="flex gap-2">
+                            <Button onClick={onReset} disabled={isSorting}>
+                                Random Array
                             </Button>
-                        </CollapsibleTrigger>
+                            <CollapsibleTrigger asChild>
+                                <Button variant="outline" disabled={isSorting}>
+                                    <ChevronsDownUp className="mr-2 h-4 w-4" />
+                                    Custom
+                                </Button>
+                            </CollapsibleTrigger>
+                        </div>
                     </div>
 
                     <div className="flex items-center gap-2">
-                            <Button variant="ghost" size="icon" onClick={onStepBackward} disabled={isBusy || !isSorting || state.currentStep <= -1}>
+                        <Button variant="ghost" size="icon" onClick={onStepBackward} disabled={isBusy || !isSorting || state.currentStep <= -1}>
                             <SkipBack />
                         </Button>
                         <Button
@@ -97,7 +99,7 @@ export function VisualizerControls({
                         >
                             {isSorting && !isPaused ? <Pause /> : <Play />}
                         </Button>
-                            <Button variant="ghost" size="icon" onClick={onStepForward} disabled={isBusy || !isSorting || state.currentStep >= state.animations.length - 1}>
+                        <Button variant="ghost" size="icon" onClick={onStepForward} disabled={isBusy || !isSorting || state.currentStep >= state.animations.length - 1}>
                             <SkipForward />
                         </Button>
                         <Button variant="ghost" size="icon" onClick={onReset}>
@@ -105,15 +107,15 @@ export function VisualizerControls({
                         </Button>
                     </div>
 
-                    <div className="flex flex-wrap items-center justify-center gap-4">
-                        <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
+                        <div className="flex items-center gap-2 w-full sm:w-auto">
                             <label className="text-sm font-medium whitespace-nowrap">Speed</label>
                             <Select
                                 onValueChange={(value) => dispatch({ type: 'SET_CONFIG', payload: { animationSpeed: Number(value) }})}
                                 defaultValue={String(animationSpeed)}
                                 disabled={isSorting && !isPaused}
                             >
-                            <SelectTrigger className="w-[120px]">
+                            <SelectTrigger className="w-full sm:w-[120px]">
                                 <SelectValue placeholder="Speed" />
                             </SelectTrigger>
                             <SelectContent>
