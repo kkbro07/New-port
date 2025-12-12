@@ -57,7 +57,7 @@
     {
       "id": "experience-1",
       "description": "A person working with wood in a workshop.",
-      "imageUrl": "https://images.unsplash.com/photo-1595692359480-155a04a4b2be?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3b29kd29ya2luZ3xlbnwwfHx8fDE3NTg4MDMwMDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1595692359480-155a04a4b2be?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3b29kd29ya2luZ3xlbnwwfHx8fDE3NTg4MDMwMDZ8MA&ixlib-rb-4.1.0&q=80&w=1080",
       "imageHint": "woodworking person"
     },
     {
@@ -71,36 +71,6 @@
       "description": "Portrait of a man smiling",
       "imageUrl": "https://instagram.famd5-4.fna.fbcdn.net/v/t51.2885-19/509816390_18064982852324699_2462314163704549797_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=7a9f4b&_nc_ohc=T1775M7552cQ7kNvwGcCJ34&_nc_ht=instagram.famd5-4.fna&oh=00_AfjWAQjDFgmpIlMA74ecc812QRga9YdIXZfJD6mbk92gmQ&oe=69177DFF",
       "imageHint": "man portrait"
-    },
-    {
-      "id": "cloudflare-outage-hero",
-      "description": "Abstract digital network connections",
-      "imageUrl": "https://images.unsplash.com/photo-1550745165-9bc0b252726a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGRpZ2l0YWwlMjBuZXR3b3JrfGVufDB8fHx8MTc2MDk0NzU0NHww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "digital network"
-    },
-    {
-      "id": "seo-basics-hero",
-      "description": "A person analyzing SEO data on a laptop screen with charts and graphs.",
-      "imageUrl": "https://images.unsplash.com/photo-1559523182-a284c3fb7cff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzZW8lMjBhbmFseXRpY3N8ZW58MHx8fHwxNzYxMjMwOTMxfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "seo analytics"
-    },
-    {
-      "id": "digital-marketing-hero",
-      "description": "A desk with a laptop displaying charts and graphs, surrounded by marketing icons.",
-      "imageUrl": "https://images.unsplash.com/photo-1557862921-37829c790f19?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxkaWdpdGFsJTIwbWFya2V0aW5nfGVufDB8fHx8MTc2MTIzMTAyNXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "digital marketing"
-    },
-    {
-      "id": "voice-search-hero",
-      "description": "A smart speaker with a glowing blue light on a wooden surface.",
-      "imageUrl": "https://images.unsplash.com/photo-1534536281715-e28d76689b4d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx2b2ljZSUyMHNlYXJjaHxlbnwwfHx8fDE3NjE3NDU4NDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "voice search"
-    },
-    {
-      "id": "digital-marketing-guide-hero",
-      "description": "A planning session with charts and graphs for digital marketing strategy.",
-      "imageUrl": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxkaWdpdGFsJTIwbWFya2V0aW5nJTIwc3RyYXRlZ3l8ZW58MHx8fHwxNzYxNzQ3Mjg1fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "marketing strategy"
     }
   ]
 }
